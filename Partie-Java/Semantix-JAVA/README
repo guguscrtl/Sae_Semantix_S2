@@ -1,0 +1,29 @@
+Fonctionnalités du projet :
+- Lire les similarités entre 2 mots dans un fichier et les mettre dans une liste
+- Trier la liste par ordre croissant de score de similarités
+- Optimiser cette liste pour supprimer les similarités inutiles
+- Ecrire dans un nouveau fichier l'arbre de similarités optimisés crée plus tot
+- Tester les calculs effectués avec les tests unitaires
+
+Pour l'instant nous n'avons pas relier cette partie au C et au PHP, donc pour tester que notre code fonctionne
+bien il faut aller dans le package "test". Une fois cela fait nous avons 3 package :
+- Calcul
+- files_text
+- Tree
+
+Dans le package "files_text", nous avons les fichiers d'entree et de sortie de test.
+Les fichiers qui commence par "similarités" sont les fichiers d'entree qui dans les faits sont les fichiers envoyés par
+le C. Les fichiers commançant par "arbre" sont les ficheirs de sorties qui contiennent les arbres optimisés. On a 3
+types de fichiers d'entree et de sorties a chaque pour bien couvrir le code. Chacun des 3 arbres passés en entrée sont
+plus ou moins complexes a optimisés d'ou la precision dans les noms de fichiers "Simple", "Medium" et "Advanced".
+Pour, par la suite tester le fichier de test du fichier calcul vous pouver effacer le contenu des fichiers avec comme
+prefix "arbre" si ce n'est pas déjà fait.
+
+Dans le package "Tree" nous avons un fichier de test pour l'Objet "Tree". Il permet de tester que la methode "sortedList"
+renvoie bien une liste triée. Vous pouvez lancer le test, si il est au vert alors il fonctionne.
+
+Dans le package "calcul", nous avons le fichier de test pour notre class de calcul. Il va vérifier qu'un arbre qu'on a
+reçu ressort bien "optimisé". On peut vérifier ensuite les résultats dans les fichiers du package "files_text".
+On test la méthode qui initialise l'arbre et la methode qui l'optimise.
+
+Pour l'instant nous n'avons noté aucun bug provenant de ce code et toutes les fonctionnalités ont été implémentées.

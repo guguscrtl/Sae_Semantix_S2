@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Semantix-JAVA:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Semantix_JAVA_jar</output-path>
+    <root id="archive" name="Semantix-JAVA.jar">
+      <element id="module-output" name="Semantix-JAVA" />
+    </root>
+  </artifact>
+</component>

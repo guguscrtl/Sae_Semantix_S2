@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="a48054aa-60fd-4a15-bab5-a2db2f78980e" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="2aaOIZdzyhsgCy0U5km0crdyii6" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;false&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Noah&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/noahg/OneDrive/Documents/workspace/SAE-Semantix/Partie-Java/Semantix/src/test/java/files_text&quot;,
+    &quot;onboarding.tips.debug.path&quot;: &quot;C:/Users/noahg/OneDrive/Documents/workspace/SAE-Semantix/Partie-Java/Semantix/src/main/java/org/example/Main.java&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\noahg\OneDrive\Documents\workspace\SAE-Semantix\Partie-Java\Semantix\src\test\java\files_text" />
+      <recent name="C:\Users\noahg\OneDrive\Documents\workspace\SAE-Semantix\Partie-Java\Semantix\src\main\java\files_text" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="calcul" />
+      <recent name="" />
+      <recent name="Tree" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.MaxSpanningTreeBuilderTest.should_initialized_tree">
+    <configuration name="MaxSpanningTreeBuilderTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Semantix" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="calcul.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="calcul" />
+      <option name="MAIN_CLASS_NAME" value="calcul.MaxSpanningTreeBuilderTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MaxSpanningTreeBuilderTest.should_add_a_to_tree" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Semantix" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="calcul.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="calcul" />
+      <option name="MAIN_CLASS_NAME" value="calcul.MaxSpanningTreeBuilderTest" />
+      <option name="METHOD_NAME" value="should_add_a_to_tree" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MaxSpanningTreeBuilderTest.should_add_b_to_tree" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Semantix" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="calcul.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="calcul" />
+      <option name="MAIN_CLASS_NAME" value="calcul.MaxSpanningTreeBuilderTest" />
+      <option name="METHOD_NAME" value="should_add_b_to_tree" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MaxSpanningTreeBuilderTest.should_add_new_word_to_tree (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Semantix" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="calcul.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="calcul" />
+      <option name="MAIN_CLASS_NAME" value="calcul.MaxSpanningTreeBuilderTest" />
+      <option name="METHOD_NAME" value="should_add_new_word_to_tree" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MaxSpanningTreeBuilderTest.should_initialized_tree" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="Semantix" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="calcul.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="calcul" />
+      <option name="MAIN_CLASS_NAME" value="calcul.MaxSpanningTreeBuilderTest" />
+      <option name="METHOD_NAME" value="should_initialized_tree" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.MaxSpanningTreeBuilderTest.should_initialized_tree" />
+        <item itemvalue="JUnit.MaxSpanningTreeBuilderTest.should_add_new_word_to_tree (1)" />
+        <item itemvalue="JUnit.MaxSpanningTreeBuilderTest" />
+        <item itemvalue="JUnit.MaxSpanningTreeBuilderTest.should_add_b_to_tree" />
+        <item itemvalue="JUnit.MaxSpanningTreeBuilderTest.should_add_a_to_tree" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a48054aa-60fd-4a15-bab5-a2db2f78980e" name="Changes" comment="" />
+      <created>1704553145515</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1704553145515</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <pin-to-top-manager>
+      <pinned-members>
+        <PinnedItemInfo parentTag="Tree.Trees" memberName="listTree" />
+      </pinned-members>
+    </pin-to-top-manager>
+  </component>
+</project>

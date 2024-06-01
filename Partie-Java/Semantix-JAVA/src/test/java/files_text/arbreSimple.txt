@@ -1,0 +1,3 @@
+Distance entre mots :
+A C 20
+B C 15

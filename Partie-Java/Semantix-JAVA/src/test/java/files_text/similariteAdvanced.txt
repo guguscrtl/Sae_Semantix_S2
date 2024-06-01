@@ -1,0 +1,9 @@
+test
+test2
+Distance entre mots :
+C D 40
+D A 50
+B C 15
+A B 2
+D B 5
+A C 20

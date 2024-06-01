@@ -1,0 +1,4 @@
+Distance entre mots :
+A D 50
+A C 20
+B C 15
