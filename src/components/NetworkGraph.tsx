@@ -40,15 +40,9 @@ const NetworkGraph: React.FC = () => {
       setGameId(id);
     });
 
-    socketIo.on('new word', ({ word, id }) => {
-      const newNode = { id: nodes.length + 1, label: word };
-      nodes.add(newNode);
-
-      const existingNodes = nodes.getIds();
-      if (existingNodes.length > 1) {
-        const randomNodeId = existingNodes[Math.floor(Math.random() * (existingNodes.length - 1))];
-        edges.add({ from: newNode.id, to: randomNodeId });
-      }
+    socketIo.on('update network', ({ nodes: newNodes, edges: newEdges }) => {
+      setNodes(new DataSet(newNodes));
+      setEdges(new DataSet(newEdges));
     });
 
     socketIo.on('update score', (newScore) => {
