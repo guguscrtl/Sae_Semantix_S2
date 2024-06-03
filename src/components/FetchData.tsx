@@ -10,7 +10,7 @@ const FetchData: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('http://localhost/my-app/data.php')
+    fetch('http://localhost/Sae_Semantix_S2/data.php')
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');

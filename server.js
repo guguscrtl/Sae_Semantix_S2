@@ -119,7 +119,7 @@ io.on('connection', (socket) => {
     }
 
     try {
-      const response = await axios.get(`http://localhost/my-app/execute_exe.php?exe=C\\addword.exe&param_s=static_tree.lex&param_f=${gameId}&param_w=${word}`);
+      const response = await axios.get(`http://localhost/Sae_Semantix_S2/execute_exe.php?exe=C\\addword.exe&param_s=static_tree.lex&param_f=${gameId}&param_w=${word}`);
       if (response.status === 200) {
         console.log('Response OK de l\'addword_exe');
       } else {
@@ -132,8 +132,8 @@ io.on('connection', (socket) => {
     }
 
     try {
-      const response = await axios.get(`http://localhost/my-app/get_score.php?file=./save/${gameId}.txt&word=` + word);
-      //const response = await axios.get('http://localhost/my-app/get_score.php');
+      const response = await axios.get(`http://localhost/Sae_Semantix_S2/get_score.php?file=./save/${gameId}.txt&word=` + word);
+      //const response = await axios.get('http://localhost/Sae_Semantix_S2/get_score.php');
       if (response.status === 200) {
         game.score = response.data.score;
         console.log('Score : ' + game.score);
