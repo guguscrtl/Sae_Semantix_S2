@@ -41,11 +41,14 @@ const NetworkGraph: React.FC = () => {
     });
 
     socketIo.on('update network', ({ nodes: newNodes, edges: newEdges }) => {
-      setNodes(new DataSet(newNodes));
-      setEdges(new DataSet(newEdges));
+      nodes.clear();
+      nodes.add(newNodes);
+      edges.clear();
+      edges.add(newEdges);
     });
 
     socketIo.on('update score', (newScore) => {
+      console.log("Score avant changement " + newScore);
       setScore(newScore);
     });
 

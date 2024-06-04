@@ -61,12 +61,11 @@ if ($output === null) {
 }
 
 // Convertir la sortie en entier (int)
-$result = intval(trim($output));
+$result = trim($output);
 
 $data = [
-    'depart' => $depart,
-    'arrive' => $arrive,
-    'score' => $result
+    'score' => $result,
+    'out' => $output
 ];
 
 // Encodez les données au format JSON et envoyez-les

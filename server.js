@@ -30,11 +30,22 @@ function getRandomWordFromFile(filePath) {
         reject(err);
         return;
       }
-      const words = data.split('\n');
+
+      const words = data.split('\n').filter(word => !hasAccents(word));
+
+      if (words.length === 0) {
+        reject('No words without accents found.');
+        return;
+      }
+
       const randomWord = words[Math.floor(Math.random() * words.length)];
       resolve(randomWord);
     });
   });
+}
+
+function hasAccents(word) {
+  return /[áàâäãåçéèêëíìîïñóòôöõúùûüýÿ]/i.test(word);
 }
 
 function runCommandCreateGame(game_id) {
@@ -84,11 +95,13 @@ io.on('connection', (socket) => {
       currentTurn: 0,
       score: 0
     };
+    const game = games[gameId];
     socket.join(gameId);
     socket.emit('gameCreated', gameId);
     runCommandCreateGame(gameId);
+    console.log(socket.id);
     io.to(socket.id).emit('your turn');
-    io.to(socket.id).emit('update score', 0);
+    io.to(socket.id).emit('update score', game.score);
   });
 
   socket.on('joinGame', (gameId) => {
@@ -97,6 +110,7 @@ io.on('connection', (socket) => {
       game.players.push(socket.id);
       socket.join(gameId);
       socket.emit('joinedGame', gameId);
+      console.log(socket.id);
       io.to(socket.id).emit('update score', game.score);
       if (game.players.length === 1) {
         io.to(game.players[game.currentTurn]).emit('your turn');
@@ -107,8 +121,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('new word', async (word) => {
-    console.log("le mot tapé est: " + word);
+    console.log("Le mot tapé est: " + word);
+    console.log("Salles du socket avant de trouver gameId: ", Array.from(socket.rooms));
     const gameId = Array.from(socket.rooms).find(r => r !== socket.id);
+    console.log('gameId trouvé: ' + gameId);
     if (!gameId) return;
 
     const game = games[gameId];
@@ -123,20 +139,38 @@ io.on('connection', (socket) => {
       if (response.status === 200) {
         console.log('Response OK de l\'addword_exe');
       } else {
-        console.error('Erreur lors de la récupération du score');
+        console.error('Erreur lors de l\'exécution de l\'addword_exe');
         return;
       }
     } catch (error) {
-      console.error('Erreur lors de la requête HTTP:', error);
+      console.error('Erreur lors de la requête HTTP (addword_exe):', error);
       return;
     }
 
     try {
+      game.currentTurn = (game.currentTurn + 1) % game.players.length;
+      io.to(game.players[game.currentTurn]).emit('your turn');
       // Fetch network structure from PHP script
       const networkResponse = await axios.get(`http://localhost/Sae_Semantix_S2/optim_tree.php?gameId=${gameId}`);
       if (networkResponse.status === 200) {
         const { nodes, edges } = networkResponse.data;
-        console.log("La structure a été envoyé à : " + gameId);
+        console.log("La structure a été envoyée à : " + gameId);
+        try {
+          const response = await axios.get(`http://localhost/Sae_Semantix_S2/score_java.php?gameId=${gameId}`);
+          if (response.status === 200) {
+            game.score = parseInt(response.data.score);
+            console.log('Score : ' + game.score);
+            console.log('out: ' + response.data.out);
+            console.log('Response : ' + JSON.stringify(response.data));
+            io.in(gameId).emit('update score', game.score);
+          } else {
+            console.error('Erreur lors de la récupération du score');
+            return;
+          }
+        } catch (error) {
+          console.error('Erreur lors de la requête HTTP (score_java):', error);
+          return;
+        }
         // Emit the new network structure to the client
         io.in(gameId).emit('update network', { nodes, edges });
       } else {
@@ -144,34 +178,16 @@ io.on('connection', (socket) => {
         return;
       }
     } catch (error) {
-      console.error('Erreur lors de la requête HTTP pour récupérer la structure du réseau:', error);
+      console.error('Erreur lors de la requête HTTP (optim_tree):', error);
       return;
     }
-
-    try {
-      const response = await axios.get(`http://localhost/Sae_Semantix_S2/score_java.php?gameId=${gameId}`);
-      if (response.status === 200) {
-        game.score = response.data.score;
-        console.log('Score : ' + game.score);
-        console.log('Response : ' + JSON.stringify(response.data));
-      } else {
-        console.error('Erreur lors de la récupération du score');
-        return;
-      }
-    } catch (error) {
-      console.error('Erreur lors de la requête HTTP:', error);
-      return;
-    }
-
-    game.currentTurn = (game.currentTurn + 1) % game.players.length;
-
-    io.to(game.players[game.currentTurn]).emit('your turn');
+    console.log('turn1: ' + game.currentTurn);
     console.log(game.score);
-    io.in(gameId).emit('update score', game.score);
+    console.log("Game ID: " + gameId);
     console.log('nouveau score :' + game.score);
-    console.log('depart :' + game.depart);
-    console.log('arrive :' + game.arrive);
+    console.log('turn2: ' + game.currentTurn);
   });
+  
 
   socket.on('chat message', (msg) => {
     const gameId = Array.from(socket.rooms).find(r => r !== socket.id);
