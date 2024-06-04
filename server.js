@@ -48,28 +48,27 @@ function hasAccents(word) {
   return /[áàâäãåçéèêëíìîïñóòôöõúùûüýÿ]/i.test(word);
 }
 
-function runCommandCreateGame(game_id, socket_id) {
-  Promise.all([
-    getRandomWordFromFile('output.txt'),
-    getRandomWordFromFile('output.txt')
-  ]).then(([randomWord, randomWord2]) => {
-    const command = `C\\new_game static_tree.lex ${game_id} ${randomWord} ${randomWord2}`;
-    exec(command, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Erreur lors de l'exécution de la commande: ${error.message}`);
-        return;
-      }
-      if (stderr) {
-        console.error(`Erreur standard: ${stderr}`);
-        return;
-      }
-      console.log(`Sortie standard ok pour creategame: ${stdout}`);
+async function getWord() {
+  const word = await getRandomWordFromFile('output.txt');
+  return word;
+}
 
-      // Emit the words to the client
-      io.to(game_id).emit('gameCreated', { id: game_id, words: [randomWord, randomWord2] }, socket_id);
-    });
-  }).catch(error => {
-    console.error(`Erreur lors du choix des mots: ${error.message}`);
+function runCommandCreateGame(game_id, socket_id, randomWord, randomWord2) {
+  const command = `C\\new_game static_tree.lex ${game_id} ${randomWord} ${randomWord2}`;
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Erreur lors de l'exécution de la commande: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      console.error(`Erreur standard: ${stderr}`);
+      return;
+    }
+    console.log(`Sortie standard ok pour creategame: ${stdout}`);
+
+    // Emit the words to the client
+    io.to(game_id).emit('gameCreated', { id: game_id, words: [randomWord, randomWord2] }, socket_id);
+    return {randomWord, randomWord2};
   });
 }
 
@@ -84,12 +83,27 @@ const io = new Server(server, {
 });
 
 const games = {};
+let mot1;
+let mot2;
+(async () => {
+  mot1 = await getWord();
+  // Vous pouvez utiliser la variable `word` ici ou dans d'autres fonctions
+})();
+(async () => {
+  mot2 = await getWord();
+  // Vous pouvez utiliser la variable `word` ici ou dans d'autres fonctions
+})();
 
 io.on('connection', (socket) => {
   console.log('a user connected');
+  const gameId = generateUniqueGameId();
+  console.log(mot1);
+  console.log(mot2);
+  console.log('La partie est crée avec comme game id : ' + gameId);
+  runCommandCreateGame(gameId, socket.id, mot1, mot2);
+  socket.emit('setGame', gameId);
 
   socket.on('createGame', () => {
-    const gameId = generateUniqueGameId();
     games[gameId] = {
       players: [socket.id],
       currentTurn: 0,
@@ -97,8 +111,7 @@ io.on('connection', (socket) => {
     };
     const game = games[gameId];
     socket.join(gameId);
-    socket.emit('gameCreated', gameId);
-    runCommandCreateGame(gameId, socket.id);
+    socket.emit('joinedGame', gameId, socket.id);
     console.log(socket.id);
     io.to(socket.id).emit('your turn');
     io.to(socket.id).emit('update score', game.score);
@@ -109,7 +122,7 @@ io.on('connection', (socket) => {
     if (game) {
       game.players.push(socket.id);
       socket.join(gameId);
-      io.in(gameId).emit('joinedGame', gameId, game.players);
+      io.in(gameId).emit('joinedGame', gameId, game.players, [mot1, mot2]);
       console.log(socket.id);
       io.to(socket.id).emit('update score', game.score);
       if (game.players.length === 1) {
