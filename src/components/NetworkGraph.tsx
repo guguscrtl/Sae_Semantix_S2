@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DataSet, Network } from 'vis-network/standalone/esm/vis-network';
 import { io, Socket } from 'socket.io-client';
 import 'vis-network/styles/vis-network.css';
-import { join } from 'path';
+import Timer, { Props } from './Timer';
 
 const SOCKET_SERVER_URL = 'http://localhost:3001';
 
 const NetworkGraph: React.FC = () => {
   const networkContainer = useRef<HTMLDivElement | null>(null);
+  const timerRef = useRef<Timer>(null); // useRef for Timer
   const [network, setNetwork] = useState<Network | null>(null);
   const [nodes, setNodes] = useState<DataSet<any>>(new DataSet([]));
   const [edges, setEdges] = useState<DataSet<any>>(new DataSet([]));
@@ -21,6 +22,26 @@ const NetworkGraph: React.FC = () => {
   const [gameId, setGameId] = useState<string | null>(null);
   const [liste_player, setListPlayer] = useState<string[]>([]);
   const [isStart, setStart] = useState<boolean>(false);
+  const [timerProps, setTimerProps] = useState<Props>({
+    seconds: 30,
+    size: 70,
+    strokeBgColor: "lightgray",
+    strokeColor: "lightgreen",
+    strokeWidth: 10,
+    onTimerEnd: () => handleTimerEnd(),
+  });
+
+  const handleTimerEnd = () => {
+    setTimerProps({
+      seconds: 120,
+      size: 70,
+      strokeBgColor: "lightgray",
+      strokeColor: "lightblue",
+      strokeWidth: 10,
+      onTimerEnd: () => console.log('Second timer ended'),
+    });
+    timerRef.current?.startTimer();
+  };
 
   useEffect(() => {
     const socketIo = io(SOCKET_SERVER_URL);
@@ -31,7 +52,7 @@ const NetworkGraph: React.FC = () => {
     });
 
     socketIo.on('gameCreated', ({ id, words }, pseudo) => {
-      console .log("mon pseudo est :" + pseudo);  
+      console.log("mon pseudo est :" + pseudo);  
       setGameId(id);
   
       if (words && words.length === 2) {
@@ -155,7 +176,10 @@ const NetworkGraph: React.FC = () => {
       <div style={{display: isStart ? "none" : "block"}}> 
         <p>ID de jeu: {gameId}</p>
         <div>
-          <button onClick={createGame}>Lancer la partie</button>
+          <button onClick={() => {
+          createGame();
+          timerRef.current?.startTimer();
+        }}>Lancer la partie</button>
             <input
               type="text"
               placeholder="Entrez l'id du jeu"
@@ -193,19 +217,27 @@ const NetworkGraph: React.FC = () => {
           <button onClick={handleSendMessage}>Envoyer</button>
         </div>
       </div>
-      <div style={{display: isStart ? "none" : "block"}}>
-        <div>
-          <h3>Joueurs :</h3>
+      <div style={styles.topRightCorner}>
+        <Timer {...timerProps} ref={timerRef} />
+      </div>
+      <div>
+        <h3>Joueurs :</h3>
         <ul>
-          {
-          liste_player.map((player) =>
-            <li>{player}</li>
-          )}
+          {liste_player.map((player, index) => (
+            <li key={index}>{player}</li>
+          ))}
         </ul>
-        </div>
       </div>
     </div>
   );
+};
+
+const styles = {
+  topRightCorner: {
+    position: 'absolute',
+    top: '10px',
+    right: '10px',
+  } as React.CSSProperties,
 };
 
 export default NetworkGraph;
