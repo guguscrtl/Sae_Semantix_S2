@@ -15,23 +15,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Requête SQL de mise à jour
         $sql = "UPDATE client SET pseudo = :newUsername WHERE pseudo = :og_pseudo";
-        // Préparation de la requête
         $stmt = $conn->prepare($sql);
-        // Liaison des paramètres
         $stmt->bindParam(':newUsername', $newUsername);
         $stmt->bindParam(':og_pseudo', $og_pseudo);
-        // Exécution de la requête
         $stmt->execute();
 
         $sql = "UPDATE parties SET playerName = :newUsername WHERE playerName = :og_pseudo";
-        // Préparation de la requête
         $stmt = $conn->prepare($sql);
-        // Liaison des paramètres
         $stmt->bindParam(':newUsername', $newUsername);
         $stmt->bindParam(':og_pseudo', $og_pseudo);
-        // Exécution de la requête
         $stmt->execute();
 
         echo "Pseudo mis à jour avec succès pour $newUsername.";
@@ -44,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $logStmt = $conn->prepare("INSERT INTO logs (user_id, action, log_date, ip_address) VALUES (?, ?, ?, ?)");
         $action = "Changement de pseudo";
         $logDate = date('Y-m-d H:i:s');
-        $ipAddress = $_SERVER['REMOTE_ADDR']; // Récupération de l'adresse IP
+        $ipAddress = $_SERVER['REMOTE_ADDR'];
         $logStmt->execute([$userId, $action, $logDate, $ipAddress]);
 
         $_SESSION['inscription_message'] = "Reconnectez-Vous";
@@ -55,7 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Erreur : " . $e->getMessage();
 
     } finally {
-        // Fermeture de la connexion à la base de données
         $conn = null;
     }
 }

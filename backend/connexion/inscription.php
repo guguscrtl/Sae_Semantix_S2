@@ -21,7 +21,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmerMotDePasse = $_POST["confirmerMotDePasse"];
     $anneeNaissance = $_POST["annee_naissance"];
 
-    // Connexion à la base de données
     try {
         $bdd= new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');
         $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -30,7 +29,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Vérifier si l'adresse e-mail est déjà utilisée
     $stmt = $bdd->prepare("SELECT email FROM client WHERE email = ?");
     $stmt->execute([$email]);
     $existingEmail = $stmt->fetchColumn();
@@ -41,7 +39,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Vérification du mot de passe
     if (strlen($motDePasse) < 12 ||
         !preg_match('/[a-z]/', $motDePasse) ||
         !preg_match('/[A-Z]/', $motDePasse) ||
@@ -51,14 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Vérification du mot de passe
     if ($motDePasse !== $confirmerMotDePasse) {
         $_SESSION['inscription_message'] = "Les mots de passe ne correspondent pas";
         header('Location: ../index.php');
         exit;
     }
 
-    // Vérification que l'année de naissance est valide
     $currentYear = date("Y");
     if ($anneeNaissance < 1900 || $anneeNaissance > 2017) {
         $_SESSION['inscription_message'] = "L'année de naissance n'est pas valide.";
@@ -66,24 +61,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
-    // Hachage du mot de passe
     $hashedPassword = password_hash($motDePasse, PASSWORD_DEFAULT);
 
-    // Génération du token de validation
     $validation_token = md5(uniqid(rand(), true));
 
-    // Requête pour insérer l'utilisateur, le mot de passe et l'année de naissance dans la table demandes_en_attente
     $requete_login = $bdd->prepare("INSERT INTO demandes_en_attente (pseudo, mdp, email, annee_naissance, validation_token) VALUES (?, ?, ?, ?, ?)");
     if ($requete_login->execute([$pseudo, $hashedPassword, $email, $anneeNaissance, $validation_token])) {
-        // Inscription réussie, envoi d'un e-mail de confirmation
 
         $mail = new PHPMailer(true);
         try {
             $mail->isSMTP(); // Utilisation de SMTP
             $mail->Host = 'partage.u-pem.fr'; // Serveur SMTP
             $mail->SMTPAuth = true; // Authentification SMTP activée
-            $mail->Username = 'matis.vivier@edu.univ-eiffel.fr'; // Votre adresse e-mail SMTP
-            $mail->Password = 'Matis2004.'; // Votre mot de passe SMTP
+            $mail->Username = 'matis.vivier@edu.univ-eiffel.fr'; 
+            $mail->Password = 'Matis2004.';
             $mail->SMTPSecure = 'ssl'; // Cryptage SSL
             $mail->Port = 465; // Port SMTP
 

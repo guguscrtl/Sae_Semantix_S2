@@ -3,8 +3,6 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 session_start();
 
-// Inclure les fichiers nécessaires pour PHPMailer
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $bdd= new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');
     $playerName = $_POST["pseudo"];
@@ -12,7 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     echo $playerName;
     $newPassword = $_POST["confirm_password"];
 
-    // Vérification du mot de passe
     if (strlen($password) < 12 ||
         !preg_match('/[a-z]/', $password) ||
         !preg_match('/[A-Z]/', $password) ||
@@ -23,7 +20,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if ($password == $newPassword) {
-        // Hachez le nouveau mot de passe avant de le stocker
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
         $requete_login = $bdd->prepare("UPDATE client SET mdp = ? WHERE pseudo = ?");

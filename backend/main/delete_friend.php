@@ -20,7 +20,6 @@ if (isset($input['id']) && isset($_SESSION['username'])) {
     try {
         $pdo = new PDO($dsn, $username, $password, $options);
 
-        // Delete both records
         $stmt = $pdo->prepare('DELETE FROM amis WHERE (id = :friendId AND utilisateur = :user) OR (id = :user AND utilisateur = :friendId)');
         $stmt->execute(['friendId' => $friendId, 'user' => $user]);
 

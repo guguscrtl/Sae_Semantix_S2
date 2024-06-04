@@ -13,9 +13,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'];
     $newEmail = $_POST['new_email'];
 
-    // Validation des données (vous pouvez ajouter des vérifications supplémentaires si nécessaire)
-
-    // Connexion à la base de données
     try {
         $conn = new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');
 
@@ -36,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Récupérer les informations de l'utilisateur depuis la base de données
     $playerName = $_SESSION['username'];
 
     try {
@@ -45,7 +41,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Vérifier si le mot de passe actuel correspond
         if (password_verify($password, $userData['mdp'])) {
             // Mettre à jour l'adresse e-mail
             $updateStmt = $conn->prepare("UPDATE client SET email = :new_email WHERE pseudo = :nom_utilisateur");
@@ -66,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $logStmt->execute([$userId, $action, $logDate, $ipAddress]);
 
 
-            // Redirection vers la page de compte après la mise à jour
             header("Location: ../main/compte.php");
             exit();
         } else {

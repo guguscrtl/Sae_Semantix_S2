@@ -28,7 +28,7 @@ body, html {
   
   .button {
     display: inline-block;
-    padding: 35px 30px 20px ; /* Ajustez le padding pour faire de la place pour l'image */
+    padding: 35px 30px 20px ;
     background-color: #856a50;
     color: #dfdfdf;
     font-size: 21px;
@@ -39,7 +39,7 @@ body, html {
     box-shadow: 4px 9px 5px 0px #5a4a3b;
     transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
     position: relative;
-    font-family: system-ui;/* Changer la police de caractères */
+    font-family: system-ui;
    
   }
 
@@ -48,7 +48,7 @@ body, html {
 .join-button span,
 .info-button span {
   position: relative;
-  top: -7px; /* Ajustez cette valeur pour déplacer le texte vers le haut */
+  top: -7px; 
 }
   
   .play-button::before,
@@ -59,7 +59,7 @@ body, html {
     background-size: cover;
     position: absolute;
     top: 7%;
-    left: -25px; /* Modifier cette valeur pour qu'elle soit 0 */
+    left: -25px; 
     transform: translateY(-50%);
     width: 66px;
     height: 66px;
@@ -105,7 +105,7 @@ body, html {
     margin-top: 20px;
   }
 
-  /* Style du pop-up */
+
   .popup {
     position: fixed;
     top: 20px;

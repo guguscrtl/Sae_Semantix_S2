@@ -8,7 +8,6 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 
-// Vérifier si l'utilisateur est connecté, sinon le rediriger vers la page de connexion
 if (!isset($_SESSION['username'])) {
     header("Location: ../connexion/login.php");
     exit();
@@ -19,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer les données du formulaire
     $password = $_POST['password'];
 
-    // Connexion à la base de données
     try {
             $conn = new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');;
 
@@ -28,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Erreur de connexion à la base de données : " . $e->getMessage();
     }
 
-    // Récupérer les informations de l'utilisateur depuis la base de données
     $playerName = $_SESSION['username'];
 
     $stmt = $conn->prepare("SELECT * FROM client WHERE pseudo = '$playerName' ");
@@ -43,9 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':nom_utilisateur', $playerName);
         $stmt->execute();
         $userData = $stmt->fetch(PDO::FETCH_ASSOC);
-        // Vérifier si le mot de passe actuel correspond
         if (password_verify($password, $userData['mdp'])) {
-            // Inscription réussie, envoi d'un e-mail de confirmation
 
             $validation_token = md5(uniqid(rand(), true));
 
@@ -54,8 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mail->isSMTP(); // Utilisation de SMTP
                 $mail->Host = 'partage.u-pem.fr'; // Serveur SMTP
                 $mail->SMTPAuth = true; // Authentification SMTP activée
-                $mail->Username = 'matis.vivier@edu.univ-eiffel.fr'; // Votre adresse e-mail SMTP
-                $mail->Password = 'Matis2004.'; // Votre mot de passe SMTP
+                $mail->Username = 'matis.vivier@edu.univ-eiffel.fr'; 
+                $mail->Password = 'Matis2004.'; 
                 $mail->SMTPSecure = 'ssl'; // Cryptage SSL
                 $mail->Port = 465; // Port SMTP
 

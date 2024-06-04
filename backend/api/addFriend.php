@@ -19,7 +19,6 @@ $bdd = new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');
 $userId = $_SESSION['user']['id'];
 $friendId = $data['friend_id'];
 
-// Ajouter un ami
 $stmt = $bdd->prepare('INSERT INTO friends (user_id, friend_id) VALUES (?, ?)');
 $stmt->execute([$userId, $friendId]);
 

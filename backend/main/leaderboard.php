@@ -92,7 +92,6 @@ try {
     <a href="regles.php" class="nav-link"><img src="image/parchemin.png" alt="Règles"> Règles</a>
     <a href="historique.php" class="nav-link"><img src="image/scope.png" alt="Historique" style="margin-left:20px"> Historique</a>
     <a href="compte.php" class="nav-link"><img src="image/pirate.png" alt="Compte"> Compte</a>
-    <a href="Logs.php" class="nav-link"><img src="image/crane.png" alt="Logs"> Logs</a>
     <a href="../connexion/deconnexion.php" class="nav-link" style="padding-left:60px"><img src="image/bateau.png" alt="Déconnexion" style="margin-right:20px"> Déconnexion</a>
 </div>
 

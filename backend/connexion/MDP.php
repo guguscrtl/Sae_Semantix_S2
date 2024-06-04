@@ -94,7 +94,6 @@
                     // Vérifie s'il y a un message d'erreur dans la session
                     if (isset($_SESSION['inscription_message']) && !empty($_SESSION['inscription_message'])) {
                         echo '<div class="error-message">' . $_SESSION['inscription_message'] . '</div>';
-				// Efface le message d'erreur de la session pour ne pas l'afficher à nouveau
 				unset($_SESSION['inscription_message']);
 				}
                 ?></div>
