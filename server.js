@@ -109,7 +109,7 @@ io.on('connection', (socket) => {
     if (game) {
       game.players.push(socket.id);
       socket.join(gameId);
-      io.in(gameId).emit('joinedGame', gameId, socket.id);
+      io.in(gameId).emit('joinedGame', gameId, game.players);
       console.log(socket.id);
       io.to(socket.id).emit('update score', game.score);
       if (game.players.length === 1) {

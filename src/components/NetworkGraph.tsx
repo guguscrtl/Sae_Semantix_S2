@@ -15,9 +15,10 @@ const NetworkGraph: React.FC = () => {
   const [isMyTurn, setIsMyTurn] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [messages, setMessages] = useState<Array<{ id: string, message: string }>>([]);
-  const [players, setPlayers] = useState<Array<{id: string, pseudo: string}>>([]);
+  const [players, setPlayers] = useState<Array<{pseudo: string}>>([]);
   const [newMessage, setNewMessage] = useState<string>('');
   const [gameId, setGameId] = useState<string | null>(null);
+  const [liste_player, setListPlayer] = useState<string[]>([]);
 
   useEffect(() => {
     const socketIo = io(SOCKET_SERVER_URL);
@@ -34,15 +35,14 @@ const NetworkGraph: React.FC = () => {
         nodes.add([newNode1, newNode2]);
   
         edges.add({ from: newNode1.id, to: newNode2.id });
-        setPlayers(prevPlayers => [ ...prevPlayers, pseudo]);
+        setListPlayer(prevPlayers => [ ...prevPlayers, pseudo]);
       }
-
     });
 
     socketIo.on('joinedGame', (id: string, pseudo) => {
       console.log('Celui qui a rejoint est : ' + pseudo)
       setGameId(id);
-      setPlayers(prevPlayers => [ ...prevPlayers, pseudo]);
+      setListPlayer(prevPlayers => [ ...prevPlayers, pseudo]);
     });
 
     socketIo.on('update network', ({ nodes: newNodes, edges: newEdges }) => {
@@ -177,6 +177,12 @@ const NetworkGraph: React.FC = () => {
       </div>
       <div>
         <h3>Joueurs :</h3>
+        <ul>
+          {
+          liste_player.map((player) =>
+            <li>{player}</li>
+          )}
+        </ul>
       </div>
     </div>
   );
