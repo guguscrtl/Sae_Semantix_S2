@@ -85,16 +85,14 @@ const io = new Server(server, {
 const games = {};
 let mot1;
 let mot2;
-(async () => {
-  mot1 = await getWord();
-  // Vous pouvez utiliser la variable `word` ici ou dans d'autres fonctions
-})();
-(async () => {
-  mot2 = await getWord();
-  // Vous pouvez utiliser la variable `word` ici ou dans d'autres fonctions
-})();
 
 io.on('connection', (socket) => {
+  (async () => {
+    mot1 = await getWord();
+  })();
+  (async () => {
+    mot2 = await getWord();
+  })();
   console.log('a user connected');
   const gameId = generateUniqueGameId();
   console.log(mot1);
