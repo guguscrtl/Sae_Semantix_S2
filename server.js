@@ -67,7 +67,7 @@ function runCommandCreateGame(game_id, socket_id, randomWord, randomWord2) {
     console.log(`Sortie standard ok pour creategame: ${stdout}`);
 
     // Emit the words to the client
-    io.to(game_id).emit('gameCreated', { id: game_id, words: [randomWord, randomWord2] }, socket_id);
+    io.to(game_id).emit('gameCreated', { id: game_id, words: [randomWord, randomWord2] });
     return {randomWord, randomWord2};
   });
 }

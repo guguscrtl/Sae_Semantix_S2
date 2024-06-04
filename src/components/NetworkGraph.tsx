@@ -60,8 +60,7 @@ const NetworkGraph: React.FC = () => {
       setGameId(id);
     });
 
-    socketIo.on('gameCreated', ({ id, words }, pseudo) => {
-      console.log("mon pseudo est :" + pseudo);  
+    socketIo.on('gameCreated', ({ id, words }) => {
       setGameId(id);
   
       if (words && words.length === 2) {
@@ -71,7 +70,6 @@ const NetworkGraph: React.FC = () => {
         nodes.add([newNode1, newNode2]);
   
         edges.add({ from: newNode1.id, to: newNode2.id });
-        setListPlayer(prevPlayers => [ ...prevPlayers, pseudo]);
       }
     });
 
