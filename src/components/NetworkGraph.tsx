@@ -15,6 +15,7 @@ const NetworkGraph: React.FC = () => {
   const [isMyTurn, setIsMyTurn] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [messages, setMessages] = useState<Array<{ id: string, message: string }>>([]);
+  const [players, setPlayers] = useState<Array<{id: string, pseudo: string}>>([]);
   const [newMessage, setNewMessage] = useState<string>('');
   const [gameId, setGameId] = useState<string | null>(null);
 
@@ -22,7 +23,8 @@ const NetworkGraph: React.FC = () => {
     const socketIo = io(SOCKET_SERVER_URL);
     setSocket(socketIo);
   
-    socketIo.on('gameCreated', ({ id, words }) => {
+    socketIo.on('gameCreated', ({ id, words }, pseudo) => {
+      console .log("mon pseudo est :" + pseudo);  
       setGameId(id);
   
       if (words && words.length === 2) {
@@ -32,12 +34,15 @@ const NetworkGraph: React.FC = () => {
         nodes.add([newNode1, newNode2]);
   
         edges.add({ from: newNode1.id, to: newNode2.id });
+        setPlayers(prevPlayers => [ ...prevPlayers, pseudo]);
       }
 
     });
 
-    socketIo.on('joinedGame', (id: string) => {
+    socketIo.on('joinedGame', (id: string, pseudo) => {
+      console.log('Celui qui a rejoint est : ' + pseudo)
       setGameId(id);
+      setPlayers(prevPlayers => [ ...prevPlayers, pseudo]);
     });
 
     socketIo.on('update network', ({ nodes: newNodes, edges: newEdges }) => {
@@ -169,6 +174,9 @@ const NetworkGraph: React.FC = () => {
           onKeyPress={(e) => e.key === 'Enter' ? handleSendMessage() : null}
         />
         <button onClick={handleSendMessage}>Envoyer</button>
+      </div>
+      <div>
+        <h3>Joueurs :</h3>
       </div>
     </div>
   );
