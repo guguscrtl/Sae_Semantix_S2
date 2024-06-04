@@ -43,10 +43,10 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container">
     <div class="buttons">
-        <a href="#" class="button play-button"><span>Jouer</span></a>
+        <a href="http://localhost:3000" class="button play-button"><span>Jouer</span></a>
         <a href="#" class="button private-button"><span>Créer une partie privée</span></a>
         <a href="#" class="button join-button"><span>Rejoindre une partie</span></a>
-        <a href="leaderboard.php" class="button info-button"><span>Infos & Classement</span></a>
+        <a href="compte.php" class="button info-button"><span>Mon compte & Infos</span></a>
     </div>
     <div class="toggle-button">
         <button id="toggleNavbarButton"><img src="image/menub.png"></button>
