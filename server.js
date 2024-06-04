@@ -105,11 +105,13 @@ io.on('connection', (socket) => {
     games[gameId] = {
       players: [socket.id],
       currentTurn: 0,
-      score: 0
+      score: 0,
+      timer: null
     };
     const game = games[gameId];
     socket.join(gameId);
     socket.emit('joinedGame', gameId, socket.id);
+    startTimer(gameId, 30 * 1000);
     console.log(socket.id);
     io.to(socket.id).emit('your turn');
     io.to(socket.id).emit('update score', game.score);
@@ -126,10 +128,41 @@ io.on('connection', (socket) => {
       if (game.players.length === 1) {
         io.to(game.players[game.currentTurn]).emit('your turn');
       }
+      if (game.timer) {
+        const remainingTime = game.timer.duration - (Date.now() - game.timer.startTime);
+        socket.emit('startTimer', { duration: remainingTime, startTime: Date.now() });
+      }
     } else {
       socket.emit('error', 'Game not found');
     }
   });
+
+  const startTimer = (gameId, duration) => {
+    const startTime = Date.now();
+    games[gameId].timer = { duration, startTime };
+    io.to(gameId).emit('startTimer', { duration, startTime });
+
+    const interval = setInterval(() => {
+      const remainingTime = duration - (Date.now() - startTime);
+      if (remainingTime <= 0) {
+        clearInterval(interval);
+        handleTimerEnd(gameId);
+      } else {
+        io.to(gameId).emit('timerUpdate', { remainingTime });
+      }
+    }, 1000);
+  };
+
+  const handleTimerEnd = (gameId) => {
+    io.to(gameId).emit('timerEnd');
+    const game = games[gameId];
+    if (game) {
+      if (game.timer.duration === 30 * 1000) {
+        startTimer(gameId, 120 * 1000);
+      } else {
+      }
+    }
+  };
 
   socket.on('new word', async (word) => {
     console.log("Le mot tapé est: " + word);

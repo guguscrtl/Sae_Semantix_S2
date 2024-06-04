@@ -8,7 +8,7 @@ const SOCKET_SERVER_URL = 'http://localhost:3001';
 
 const NetworkGraph: React.FC = () => {
   const networkContainer = useRef<HTMLDivElement | null>(null);
-  const timerRef = useRef<Timer>(null); // useRef for Timer
+  const timerRef = useRef<Timer>(null);
   const [network, setNetwork] = useState<Network | null>(null);
   const [nodes, setNodes] = useState<DataSet<any>>(new DataSet([]));
   const [edges, setEdges] = useState<DataSet<any>>(new DataSet([]));
@@ -17,27 +17,29 @@ const NetworkGraph: React.FC = () => {
   const [isMyTurn, setIsMyTurn] = useState<boolean>(false);
   const [score, setScore] = useState<number>(0);
   const [messages, setMessages] = useState<Array<{ id: string, message: string }>>([]);
-  const [players, setPlayers] = useState<Array<{pseudo: string}>>([]);
+  const [players, setPlayers] = useState<Array<{ pseudo: string }>>([]);
   const [newMessage, setNewMessage] = useState<string>('');
   const [gameId, setGameId] = useState<string | null>(null);
   const [liste_player, setListPlayer] = useState<string[]>([]);
   const [isStart, setStart] = useState<boolean>(false);
   const [isFinish, setFinish] = useState<boolean>(false);
+  const [isEnabled, setInput] = useState<boolean>(false);
   const [timerProps, setTimerProps] = useState<Props>({
     seconds: 30,
     size: 70,
-    strokeBgColor: "lightgray",
-    strokeColor: "lightgreen",
+    strokeBgColor: 'lightgray',
+    strokeColor: 'lightgreen',
     strokeWidth: 10,
     onTimerEnd: () => handleTimerEnd(),
   });
 
   const handleTimerEnd = () => {
+    setInput(true);
     setTimerProps({
       seconds: 120,
       size: 70,
-      strokeBgColor: "lightgray",
-      strokeColor: "lightblue",
+      strokeBgColor: 'lightgray',
+      strokeColor: 'lightblue',
       strokeWidth: 10,
       onTimerEnd: () => setFinish(true),
     });
@@ -55,20 +57,20 @@ const NetworkGraph: React.FC = () => {
   useEffect(() => {
     const socketIo = io(SOCKET_SERVER_URL);
     setSocket(socketIo);
-  
+
     socketIo.on('setGame', (id) => {
       setGameId(id);
     });
 
     socketIo.on('gameCreated', ({ id, words }) => {
       setGameId(id);
-  
+
       if (words && words.length === 2) {
         const [word1, word2] = words;
         const newNode1 = { id: nodes.length + 1, label: word1 };
         const newNode2 = { id: nodes.length + 2, label: word2 };
         nodes.add([newNode1, newNode2]);
-  
+
         edges.add({ from: newNode1.id, to: newNode2.id });
       }
     });
@@ -78,17 +80,17 @@ const NetworkGraph: React.FC = () => {
       edges.clear();
       if (words && words.length === 2) {
         const [word1, word2] = words;
-        console.log("mot1: " + word1);
-        console.log("mot2: " + word2);
+        console.log('mot1: ' + word1);
+        console.log('mot2: ' + word2);
         const newNode1 = { id: nodes.length + 1, label: word1 };
         const newNode2 = { id: nodes.length + 2, label: word2 };
         nodes.add([newNode1, newNode2]);
-  
+
         edges.add({ from: newNode1.id, to: newNode2.id });
       }
-      console.log('Celui qui a rejoint est : ' + pseudo)
+      console.log('Celui qui a rejoint est : ' + pseudo);
       setGameId(id);
-      setListPlayer(prevPlayers => [ ...prevPlayers, pseudo]);
+      setListPlayer((prevPlayers) => [...prevPlayers, pseudo]);
       setStart(true);
     });
 
@@ -100,7 +102,7 @@ const NetworkGraph: React.FC = () => {
     });
 
     socketIo.on('update score', (newScore) => {
-      console.log("Score avant changement " + newScore);
+      console.log('Score avant changement ' + newScore);
       setScore(newScore);
     });
 
@@ -113,7 +115,30 @@ const NetworkGraph: React.FC = () => {
     });
 
     socketIo.on('chat message', (msg) => {
-      setMessages(prevMessages => [...prevMessages, msg]);
+      setMessages((prevMessages) => [...prevMessages, msg]);
+    });
+
+    socketIo.on('startTimer', ({ duration, startTime }) => {
+      const remainingTime = duration - (Date.now() - startTime);
+      setTimerProps((prevProps) => ({
+        ...prevProps,
+        seconds: remainingTime / 1000,
+        onTimerEnd: handleTimerEnd,
+      }));
+      timerRef.current?.startTimer();
+    });
+
+    socketIo.on('timerUpdate', ({ remainingTime }) => {
+      setTimerProps((prevProps) => ({
+        ...prevProps,
+        seconds: remainingTime / 1000,
+        onTimerEnd: handleTimerEnd,
+      }));
+      timerRef.current?.startTimer();
+    });
+
+    socketIo.on('timerEnd', () => {
+      handleTimerEnd();
     });
 
     return () => {
@@ -179,50 +204,67 @@ const NetworkGraph: React.FC = () => {
 
   return (
     <div>
-      <div style={{display: isFinish ? "none" : "block"}}>
-        <div style={styles.topLeftCorner}><button onClick={redirectToPHP}>Revenir a l'acceuil</button></div>
+      <div style={{ display: isFinish ? 'none' : 'block' }}>
+        <div style={styles.topLeftCorner}>
+          <button onClick={redirectToPHP}>Revenir à l'accueil</button>
+        </div>
         <div ref={networkContainer} style={{ height: '500px' }} />
-        <div style={{display: isStart ? "none" : "block"}}> 
+        <div style={{ display: isStart ? 'none' : 'block' }}>
           <p>ID de jeu: {gameId}</p>
           <div>
-            <button onClick={() => {
-            createGame();
-            timerRef.current?.startTimer();
-          }}>Lancer la partie</button>
-              <input
-                type="text"
-                placeholder="Entrez l'id du jeu"
-                onBlur={(e) => joinGame(e.target.value)}
-              />
+            <button
+              onClick={() => {
+                createGame();
+                timerRef.current?.startTimer();
+              }}
+            >
+              Lancer la partie
+            </button>
+            <input
+              type="text"
+              placeholder="Entrez l'id du jeu"
+              onBlur={(e) => joinGame(e.target.value)}
+            />
           </div>
         </div>
-        <div style={{display: isStart ? "block" : "none"}}>
+        <div style={{ display: isStart ? 'block' : 'none' }}>
           <div>
             <input
               type="text"
               value={word}
               onChange={(e) => setWord(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' ? handleAddWord() : null}
+              onKeyPress={(e) => (e.key === 'Enter' ? handleAddWord() : null)}
               disabled={!isMyTurn}
             />
-            <button onClick={handleAddWord} disabled={!isMyTurn}>Ajouter le mot</button>
+            <button onClick={handleAddWord} disabled={!isMyTurn || !isEnabled}>
+              Ajouter le mot
+            </button>
           </div>
           <div>
             <h2>Score: {score}</h2>
           </div>
-          <div className='BoxContainer'>
+          <div className="BoxContainer">
             <div className="ChatContainer">
-              <h3> Chat</h3>
-              <div style={{ height: '150px', overflowY: 'scroll', border: '1px solid black', padding: '5px' }}>
+              <h3>Chat</h3>
+              <div
+                style={{
+                  height: '150px',
+                  overflowY: 'scroll',
+                  border: '1px solid black',
+                  padding: '5px',
+                }}
+              >
                 {messages.map((msg, index) => (
-                  <div key={index}><strong>{msg.id}</strong>: {msg.message}</div>
+                  <div key={index}>
+                    <strong>{msg.id}</strong>: {msg.message}
+                  </div>
                 ))}
               </div>
               <input
                 type="text"
                 value={newMessage}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' ? handleSendMessage() : null}
+                onKeyPress={(e) => (e.key === 'Enter' ? handleSendMessage() : null)}
               />
               <button onClick={handleSendMessage}>Envoyer</button>
             </div>
@@ -239,7 +281,7 @@ const NetworkGraph: React.FC = () => {
         <div style={styles.topRightCorner}>
           <Timer {...timerProps} ref={timerRef} />
         </div>
-        <div style={{display: isStart ? "none" : "block"}}>
+        <div style={{ display: isStart ? 'none' : 'block' }}>
           <h3>Joueurs :</h3>
           <ul>
             {liste_player.map((player, index) => (
@@ -248,13 +290,13 @@ const NetworkGraph: React.FC = () => {
           </ul>
         </div>
       </div>
-      <div style={{display: isFinish ? "block" : "none"}}>
-        <div style={{backgroundColor: "ceb59e"}}>
+      <div style={{ display: isFinish ? 'block' : 'none' }}>
+        <div style={{ backgroundColor: 'ceb59e' }}>
           <h1>Partie terminée !</h1>
           <h2>Score final: {score}</h2>
           <h2>Bravo à vous !</h2>
           <button onClick={refreshPage}>Nouvelle partie</button>
-          <button onClick={redirectToPHP}>Revenir a l'acceuil</button>
+          <button onClick={redirectToPHP}>Revenir à l'accueil</button>
         </div>
       </div>
     </div>
