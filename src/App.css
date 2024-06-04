@@ -41,6 +41,17 @@
   background-color: #ceb59e;
 }
 
+.BoxContainer{
+  width: 1000px;
+}
+
 .ChatContainer{
-  background-color: blue;
+  width: 600px;
+  margin-left: 100px;
+}
+
+.PlayerContainer{
+  width: 500px;
+  margin-left: 1200px;
+  margin-top: -230px;
 }

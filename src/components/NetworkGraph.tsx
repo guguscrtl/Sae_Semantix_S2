@@ -22,6 +22,7 @@ const NetworkGraph: React.FC = () => {
   const [gameId, setGameId] = useState<string | null>(null);
   const [liste_player, setListPlayer] = useState<string[]>([]);
   const [isStart, setStart] = useState<boolean>(false);
+  const [isFinish, setFinish] = useState<boolean>(false);
   const [timerProps, setTimerProps] = useState<Props>({
     seconds: 30,
     size: 70,
@@ -38,9 +39,17 @@ const NetworkGraph: React.FC = () => {
       strokeBgColor: "lightgray",
       strokeColor: "lightblue",
       strokeWidth: 10,
-      onTimerEnd: () => console.log('Second timer ended'),
+      onTimerEnd: () => setFinish(true),
     });
     timerRef.current?.startTimer();
+  };
+
+  const refreshPage = () => {
+    window.location.reload();
+  };
+
+  const redirectToPHP = () => {
+    window.location.href = 'http://localhost/Sae_Semantix_S2/backend/main/menu.php';
   };
 
   useEffect(() => {
@@ -172,61 +181,83 @@ const NetworkGraph: React.FC = () => {
 
   return (
     <div>
-      <div ref={networkContainer} style={{ height: '500px' }} />
-      <div style={{display: isStart ? "none" : "block"}}> 
-        <p>ID de jeu: {gameId}</p>
-        <div>
-          <button onClick={() => {
-          createGame();
-          timerRef.current?.startTimer();
-        }}>Lancer la partie</button>
+      <div style={{display: isFinish ? "none" : "block"}}>
+        <div style={styles.topLeftCorner}><button onClick={redirectToPHP}>Revenir a l'acceuil</button></div>
+        <div ref={networkContainer} style={{ height: '500px' }} />
+        <div style={{display: isStart ? "none" : "block"}}> 
+          <p>ID de jeu: {gameId}</p>
+          <div>
+            <button onClick={() => {
+            createGame();
+            timerRef.current?.startTimer();
+          }}>Lancer la partie</button>
+              <input
+                type="text"
+                placeholder="Entrez l'id du jeu"
+                onBlur={(e) => joinGame(e.target.value)}
+              />
+          </div>
+        </div>
+        <div style={{display: isStart ? "block" : "none"}}>
+          <div>
             <input
               type="text"
-              placeholder="Entrez l'id du jeu"
-              onBlur={(e) => joinGame(e.target.value)}
+              value={word}
+              onChange={(e) => setWord(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' ? handleAddWord() : null}
+              disabled={!isMyTurn}
             />
-        </div>
-      </div>
-      <div style={{display: isStart ? "block" : "none"}}>
-        <div>
-          <input
-            type="text"
-            value={word}
-            onChange={(e) => setWord(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' ? handleAddWord() : null}
-            disabled={!isMyTurn}
-          />
-          <button onClick={handleAddWord} disabled={!isMyTurn}>Ajouter le mot</button>
-        </div>
-        <div>
-          <h2>Score: {score}</h2>
-        </div>
-        <div>
-          <h3> Chat</h3>
-          <div style={{ height: '150px', overflowY: 'scroll', border: '1px solid black', padding: '5px' }}>
-            {messages.map((msg, index) => (
-              <div key={index}><strong>{msg.id}</strong>: {msg.message}</div>
-            ))}
+            <button onClick={handleAddWord} disabled={!isMyTurn}>Ajouter le mot</button>
           </div>
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' ? handleSendMessage() : null}
-          />
-          <button onClick={handleSendMessage}>Envoyer</button>
+          <div>
+            <h2>Score: {score}</h2>
+          </div>
+          <div className='BoxContainer'>
+            <div className="ChatContainer">
+              <h3> Chat</h3>
+              <div style={{ height: '150px', overflowY: 'scroll', border: '1px solid black', padding: '5px' }}>
+                {messages.map((msg, index) => (
+                  <div key={index}><strong>{msg.id}</strong>: {msg.message}</div>
+                ))}
+              </div>
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' ? handleSendMessage() : null}
+              />
+              <button onClick={handleSendMessage}>Envoyer</button>
+            </div>
+            <div className="PlayerContainer">
+              <h3>Joueurs :</h3>
+              <ul>
+                {liste_player.map((player, index) => (
+                  <li key={index}>{player}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style={styles.topRightCorner}>
+          <Timer {...timerProps} ref={timerRef} />
+        </div>
+        <div style={{display: isStart ? "none" : "block"}}>
+          <h3>Joueurs :</h3>
+          <ul>
+            {liste_player.map((player, index) => (
+              <li key={index}>{player}</li>
+            ))}
+          </ul>
         </div>
       </div>
-      <div style={styles.topRightCorner}>
-        <Timer {...timerProps} ref={timerRef} />
-      </div>
-      <div>
-        <h3>Joueurs :</h3>
-        <ul>
-          {liste_player.map((player, index) => (
-            <li key={index}>{player}</li>
-          ))}
-        </ul>
+      <div style={{display: isFinish ? "block" : "none"}}>
+        <div style={{backgroundColor: "ceb59e"}}>
+          <h1>Partie terminée !</h1>
+          <h2>Score final: {score}</h2>
+          <h2>Bravo à vous !</h2>
+          <button onClick={refreshPage}>Nouvelle partie</button>
+          <button onClick={redirectToPHP}>Revenir a l'acceuil</button>
+        </div>
       </div>
     </div>
   );
@@ -237,6 +268,11 @@ const styles = {
     position: 'absolute',
     top: '10px',
     right: '10px',
+  } as React.CSSProperties,
+  topLeftCorner: {
+    position: 'absolute',
+    bottom: '10px',
+    left: '10px',
   } as React.CSSProperties,
 };
 
