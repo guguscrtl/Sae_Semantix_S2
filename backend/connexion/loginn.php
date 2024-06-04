@@ -142,7 +142,6 @@
         <?php
             session_start();
 
-            // Vérifier si un message de confirmation est présent
             if (isset($_SESSION['inscription_message'])) {
                 echo '<div class="message">' . $_SESSION['inscription_message'] . '</div>';
                 // Effacer le message de la session pour ne pas l'afficher à nouveau
@@ -169,13 +168,11 @@
         <div class="inscrire">
             <a href="../connexion/../index.php">S'inscrire</a>
         </div>
-        <!-- Bouton pour la page d'inscription -->
         <div class="connecter">
             <a href="MDP.php">Mot de Passe oublier ? Réinitialiser</a>
         </div>
     </div>
 
-    <!-- Ajout de JavaScript pour basculer l'affichage du mot de passe -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const togglePasswordImage = document.getElementById("togglePassword");

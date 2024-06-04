@@ -4,7 +4,6 @@
     <title>Réinitialisation du mot de passe</title>
 </head>
 <style>
-    /* Style global du corps de la page */
     body {
         font-family: 'Arial', sans-serif;
         background-color: #709CA7;
@@ -82,10 +81,8 @@
         <center><?php
         session_start();
 
-        // Vérifier si un message de confirmation est présent
         if (isset($_SESSION['inscription_message'])) {
             echo '<div class="message">' . $_SESSION['inscription_message'] . '</div>';
-            // Effacer le message de la session pour ne pas l'afficher à nouveau
             unset($_SESSION['inscription_message']);
         }
         ?></center>

@@ -66,13 +66,12 @@
     font-weight: bold;
   }
 
-  /* Style des liens à l'intérieur des boîtes d'amis */
+
   .friend-box a {
-      color: inherit; /* Utilisez la couleur de texte par défaut */
-      text-decoration: none; /* Supprimez le soulignement du lien */
+      color: inherit; 
+      text-decoration: none; 
   }
 
-  /* Style lorsque le curseur survole les boîtes d'amis */
   .friend-box:hover {
     box-shadow: 6px 14px 10px 0px #5a4a3b;
     transform: translateY(-5px);

@@ -13,7 +13,6 @@ if ($file) {
         // Divise la ligne en mots et distance
         $elements = explode(' ', $line);
 
-        // Assurez-vous qu'il y a 3 éléments (mot1, mot2, distance)
         if (count($elements) === 3) {
             $mot1 = $elements[0];
             $mot2 = $elements[1];

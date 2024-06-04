@@ -15,7 +15,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["token"])) {
     $token = $_GET["token"];
     echo"Je suis bien dans validation";
 
-    // Connexion à la base de données
     try {
         $bdd= new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');
         $bdd->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -24,17 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["token"])) {
         exit;
     }
 
-    // Vérifier si le token de validation est valide
     $stmt = $bdd->prepare("SELECT * FROM demandes_en_attente WHERE validation_token = ?");
     $stmt->execute([$token]);
     $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($userData) {
-        // Transférer les données vers la table client
         $insertStmt = $bdd->prepare("INSERT INTO client (pseudo, mdp, email, annee_naissance) VALUES (?, ?, ?, ?)");
         $insertStmt->execute([$userData["pseudo"], $userData["mdp"], $userData["email"], $userData["annee_naissance"]]);
 
-        // Supprimer l'entrée de la table demandes_en_attente
         $deleteStmt = $bdd->prepare("DELETE FROM demandes_en_attente WHERE validation_token = ?");
         $deleteStmt->execute([$token]);
 

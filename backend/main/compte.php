@@ -5,7 +5,6 @@ if (!isset($_SESSION['username'])) {
     header("Location: ../connexion/login.php");
     exit();
 }
-// Connexion à la base de données
 try {
     $conn = new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -31,9 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newEmail = $_POST['new_email'];
     $newPassword = $_POST['new_password'];
 
-    // ... (Votre code pour la mise à jour des informations)
-
-    // Redirection vers la page de compte après la mise à jour
     header("Location: compte.php");
     exit();
 }
@@ -62,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
     </div>
     
-    <!-- Info utilisateur !-->
     <div class="info">
         <img src="image/pirate.png" alt="Icone utilisateur">
         <p>Pseudo : <?php echo $user['pseudo']; ?></p>

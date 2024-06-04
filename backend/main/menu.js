@@ -22,33 +22,27 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (navbar.style.right === '0px') {
             navbar.style.right = '-300px'; // Cacher la barre de navigation
-            toggleImage.src = 'image/menub.png'; // Changer l'image
+            toggleImage.src = 'image/menub.png';
         } else {
             navbar.style.right = '0px'; // Afficher la barre de navigation
-            toggleImage.src = 'image/menub.png'; // Changer l'image
+            toggleImage.src = 'image/menub.png'; 
         }
 
-        // Ajouter une transition pour l'image
         toggleImage.style.transition = 'transform 0.3s ease-in-out';
 
-        // Inverser la rotation de l'image
         toggleImage.style.transform = toggleImage.style.transform === 'rotate(90deg)' ? 'rotate(0deg)' : 'rotate(90deg)';
     }
 });
 
 
-// Écouter les clics sur le bouton de bascule
 document.getElementById('toggleNavbarButton').addEventListener('click', toggleNavbar);
 
 
 function expandFriendBox(element, index) {
-  // Ajoute une classe 'expanded' à la boîte d'ami cliquée
   element.classList.toggle('expanded');
 
-  // Récupère la hauteur de la boîte agrandie
   var expandedHeight = element.offsetHeight;
 
-  // Décale les boîtes d'amis en dessous de celle cliquée
   var friendBoxes = document.querySelectorAll('.friend-box');
   for (var i = index + 1; i < friendBoxes.length; i++) {
       friendBoxes[i].style.transform = 'translateY(' + (expandedHeight - 20) + 'px)';

@@ -1,7 +1,6 @@
 <?php 
 session_start();
 
-// Vérifier si l'utilisateur est connecté, sinon le rediriger vers la page de connexion
 if (!isset($_SESSION['username'])) {
     header("Location: ../connexion/login.php");
     exit();
@@ -9,16 +8,13 @@ if (!isset($_SESSION['username'])) {
 
 $conn = new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');
 
-// Récupérer le nom d'utilisateur de la session
 $user = $_SESSION['username'];
 
-// Récupérer les demandes d'amis reçues
 $stmt = $conn->prepare("SELECT expediteur FROM demandes_amis WHERE destinataire = :destinataire AND statut = 'en_attente'");
 $stmt->bindParam(":destinataire", $user);
 $stmt->execute();
 $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Récupérer la liste des amis de l'utilisateur
 $stmt = $conn->prepare("SELECT id, pseudo_amis FROM amis WHERE utilisateur = :utilisateur");
 $stmt->bindParam(":utilisateur", $user);
 $stmt->execute();

@@ -6,7 +6,6 @@
 </head>
 
 <style>
-    /* Style global du corps de la page */
     body {
         font-family: 'Arial', sans-serif;
         background-color: #709CA7;
@@ -19,7 +18,6 @@
         height: 100vh;
     }
 
-    /* Style pour le formulaire */
     form {
         background-color: #B8CBD0;
         padding: 40px;
@@ -29,14 +27,12 @@
         margin-top: 20px;
     }
 
-    /* Style pour les labels */
     label {
         display: block;
         margin-bottom: 10px;
         color: #333;
     }
 
-    /* Style pour les champs de saisie */
     input[type="password"] {
         width: 100%;
         padding: 10px;
@@ -46,7 +42,6 @@
         box-sizing: border-box;
     }
 
-    /* Style pour le bouton de soumission */
     input[type="submit"] {
         background-color: #137C8B;
         color: white;
@@ -63,7 +58,6 @@
         background-color: #709CA7;
     }
 
-    /* Pour éviter l'espacement supplémentaire après les <br> */
     br {
         display: none;
     }
@@ -82,10 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $confirmNewPassword = $_POST['confirm_new_password'];
     $playerName = $_SESSION['username'];
 
-    // Validation des données (vous pouvez ajouter des vérifications supplémentaires si nécessaire)
-
-    // Vérification du mot de passe actuel et mise à jour du mot de passe dans la base de données
-    // Code de connexion à la base de données
     try {
         $conn = new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -103,19 +93,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($newPassword !== $confirmNewPassword) {
             $_SESSION['inscription_message'] = "Les champs de mot de passe ne correspondent pas.";
-            exit; // Arrêter l'exécution du script si les mots de passe ne correspondent pas
+            exit; 
         }
 
         $stmt = $conn->prepare("SELECT mdp FROM client WHERE pseudo = ?");
         if ($stmt->execute([$playerName])) {
             $userData = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Vérifier si le mot de passe actuel correspond à celui enregistré dans la base de données
             if (password_verify($currentPassword, $userData['mdp'])) {
-                // Hasher le nouveau mot de passe
                 $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-                // Mettre à jour le mot de passe dans la base de données
                 $updateStmt = $conn->prepare("UPDATE client SET mdp = ? WHERE pseudo = ?");
                 $updateStmt->execute([$hashedPassword, $playerName]);
 
@@ -154,10 +141,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <center><div class="message" style="color: red; margin-bottom: 3%">
             <?php
-            // Vérifie s'il y a un message d'erreur dans la session
             if (isset($_SESSION['inscription_message']) && !empty($_SESSION['inscription_message'])) {
                 echo '<div class="error-message">' . $_SESSION['inscription_message'] . '</div>';
-                // Efface le message d'erreur de la session pour ne pas l'afficher à nouveau
                 unset($_SESSION['inscription_message']);
             }
             ?></div></center>

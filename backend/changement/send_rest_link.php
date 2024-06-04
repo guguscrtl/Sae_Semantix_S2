@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Spécifier l'encodage UTF-8 -->
     <meta charset="utf-8">
-
-    <!-- Vos autres balises head ici -->
     <link rel="stylesheet" type="text/css" href="votre-style/style.css">
 </head>
 <body>
@@ -41,10 +38,10 @@ if ($_POST) {
         try {
             $mail = new PHPMailer(true);
             $mail->isSMTP();
-            $mail->Host = 'partage.u-pem.fr'; // Serveur SMTP
+            $mail->Host = 'partage.u-pem.fr'; 
             $mail->SMTPAuth = true;
-            $mail->Username = 'matis.vivier@edu.univ-eiffel.fr'; // Votre adresse e-mail SMTP
-            $mail->Password = 'Matis2004.'; // Votre mot de passe SMTP
+            $mail->Username = 'matis.vivier@edu.univ-eiffel.fr'; 
+            $mail->Password = 'Matis2004.'; 
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
 

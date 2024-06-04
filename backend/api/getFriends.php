@@ -9,7 +9,6 @@ if (!isset($_SESSION['user'])) {
 
 $bdd = new PDO('mysql:host=localhost;dbname=matis.vivier_db', 'root', '');
 
-// Récupérer la liste des amis
 $userId = $_SESSION['user']['id'];
 $stmt = $bdd->prepare('SELECT * FROM friends WHERE user_id = ?');
 $stmt->execute([$userId]);
