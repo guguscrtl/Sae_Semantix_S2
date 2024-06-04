@@ -6,6 +6,8 @@
 /save
 /jdk-21
 /save_java
+backend/PHPMailer
+backend/node_modules
 C/word2vec.bin
 debug.log
 output.txt

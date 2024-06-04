@@ -1,0 +1,115 @@
+/* Réinitialisation des styles par défaut du navigateur */
+body, h1, h2, p, ul, li, form {
+    margin: 0;
+    padding: 0;
+}
+
+/* Style de l'arrière-plan */
+body {
+    /*background: linear-gradient(0.25turn, rgb(164, 229, 238), rgb(17, 161, 161)) !important;*/
+    background-color: lightgrey;
+    font-family: Arial, sans-serif;
+}
+
+/* Style du conteneur principal */
+.container {
+    max-width: 400px;
+    margin: 0 auto; /* Centre horizontalement */
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Centre verticalement et horizontalement */
+}
+
+
+/* Style du titre */
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Style du formulaire */
+form {
+    padding: 10px;
+}
+
+label img {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+/* Style des champs de texte */
+input[type="text"],
+input[type="password"] {
+    width: calc(100% - 30px); /* Ajuste la largeur pour tenir compte de l'icône */
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Style du bouton d'inscription */
+input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+input[type="submit"]:hover{
+    transform: scale(1.05);
+    transition-duration: 0.5s;
+}
+
+/* Style du lien de connexion */
+.connecter {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.connecter a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Style du formulaire */
+form {
+    text-align: center; /* Centre le texte dans le formulaire */
+}
+
+/* Style des étiquettes et des champs de formulaire */
+label, input {
+    display: block; /* Place chaque étiquette et champ sur une nouvelle ligne */
+    margin: 10px auto; /* Centre chaque élément horizontalement */
+    text-align: center; /* Centre le texte dans chaque élément */
+}
+
+#togglePassword {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+}
+
+/* Style pour le fond vidéo */
+#background-video {
+    position: fixed;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1; /* Placez la vidéo en arrière-plan */
+}
+

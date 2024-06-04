@@ -1,0 +1,119 @@
+body {
+    background-color: #709CA7;
+}
+.table td, .table th {
+    text-align: center;
+    vertical-align: middle;
+    font-size: 20px;
+}
+.hidden-info {
+    display: none;
+}
+
+h2 {
+    text-align : center;
+    margin-bottom : 3%;
+}
+
+h1 {
+    text-align: center;
+    width: 62.5%;
+}
+.navbar {
+    display: flex;
+    justify-content: center;
+    background: url(../image_jeu/wood.webp); /* Fond transparent */
+    margin-left: 40%;
+    margin-top: 1%;
+    margin-right: 40%;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    color: black;
+}
+
+
+p{
+    width: 62.5%;
+    text-align: center;
+}
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    font-size: 0; /* Empêche l'espacement entre les éléments */
+}
+
+.navbar li {
+    position: relative;
+    margin-bottom: -3px;
+}
+
+.navbar a {
+    display: block;
+    text-align: center;
+    padding: 15px 28px;
+    color: black;
+}
+
+.container {
+    margin-left: 0px;
+}
+
+
+/* Styles pour les icônes */
+.navbar img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.container h1 {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: black;
+    border-collapse: collapse;
+    margin: auto;
+    background-color: #cfb88c;
+    border-color: black;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+    color: black;
+}
+
+.table thead {
+    background: url("../image_jeu/wood.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid #dee2e6;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 1px solid #dee2e6;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+    border-bottom-width: 2px;
+}

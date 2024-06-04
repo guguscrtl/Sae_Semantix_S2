@@ -1,0 +1,107 @@
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../main/image/fond-leader.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+.parent-container {
+    display: flex;
+    justify-content: flex-end; /* Aligne les enfants à droite */
+    width: 100%; /* Assure que le conteneur parent occupe toute la largeur */
+}
+
+.container {
+    margin-top: 5%;
+    width: 60%; /* Ajustez la largeur selon vos besoins */
+    margin-left: -10%;
+}
+
+.container.mt-5 {
+    margin-top: 0px !important;
+}
+
+.table {
+    width: 90%;
+    margin-bottom: 1rem;
+    color: black;
+    border-collapse: collapse;
+    margin: auto;
+    background-color: #cfb88c;
+    border-color: black;
+    font-size: 18px;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+.table thead {
+    background: url("../image_jeu/wood.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #856a50;
+}
+
+.table-bordered th,
+.table-bordered td {
+    border: 3px solid #856a50;
+}
+
+.table-bordered thead th,
+.table-bordered thead td {
+    border-bottom-width: 2px;
+}
+
+.navbar {
+    margin-left: 35%;
+    margin-right: 35%;
+}
+
+.row {
+    justify-content: end;
+}
+
+.col-md-8 {
+    text-align: center;
+
+}
+
+h3 {
+    color: black;
+    font-size: 30px;
+}
+
+td img {
+    width: 60%;
+}
+
+.gold-row {
+    background-color: rgb(196, 171, 30); /* Couleur de fond dorée */
+}
+
+.silver-row {
+    background-color: silver; /* Couleur de fond argentée */
+}
+
+.bronze-row {
+    background-color: rgb(190, 127, 72); /* Couleur de fond bronze */
+}
+
+.position-column {
+    width: 50px; /* Largeur fixe de la colonne de position */
+}

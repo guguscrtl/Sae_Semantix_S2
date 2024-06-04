@@ -1,0 +1,114 @@
+/* Style global du corps de la page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Style du conteneur principal du formulaire */
+.container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    display: flex;
+}
+
+
+/* Style pour l'en-tête du formulaire */
+h1 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Style pour les input dans le formulaire */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 500px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* Style pour le placeholder */
+::placeholder {
+    color: #aaa;
+}
+
+/* Style pour les images (icons) */
+.container img {
+    margin-right: 10px;
+}
+
+/* Style pour les boutons */
+input[type="submit"] {
+    background-color: #08f;
+    color: white;
+    border: none;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+input[type="submit"]:hover {
+    background-color: #06c;
+}
+
+/* Style pour le lien de connexion */
+.connecter a {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: #08f;
+    text-decoration: none;
+}
+
+.connecter a:hover {
+    text-decoration: underline;
+}
+
+/* Style pour la table dans le formulaire */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td {
+    padding: 0;
+}
+
+/* Cacher les bordures de la table */
+td, table {
+    border: none;
+}
+
+/* Alignement des éléments à gauche */
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.row {
+    width: 100%;
+}
+
+/* Style pour le fond vidéo */
+#background-video {
+    position: fixed;
+    left: 0;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1; /* Placez la vidéo en arrière-plan */
+}

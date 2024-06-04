@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat Application</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat { list-style: none; margin: 0; padding: 0; }
+        #chat li { padding: 8px; margin-bottom: 10px; background-color: #f1f1f1; }
+        #message { width: 100%; padding: 10px; }
+    </style>
+</head>
+<body>
+    <ul id="chat"></ul>
+    <form id="form" action="">
+        <input id="message" autocomplete="off" /><button>Send</button>
+    </form>
+    <script src="http://localhost:3001/socket.io/socket.io.js"></script> <!-- Adresse du serveur Node.js -->
+    <script>
+        const socket = io('http://localhost:3001'); // Connexion au serveur Node.js
+
+        const form = document.getElementById('form');
+        const input = document.getElementById('message');
+        const chat = document.getElementById('chat');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            if (input.value) {
+                socket.emit('chat message', input.value);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', function(msg) {
+            const item = document.createElement('li');
+            item.textContent = msg;
+            chat.appendChild(item);
+            window.scrollTo(0, document.body.scrollHeight);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+.vertical-navbar {
+    position: fixed;
+    top: 0;
+    right: -300px; /* Caché par défaut */
+    height: 100%;
+    width: 300px; /* Largeur de la barre de navigation */
+    background-color: #caa787; /* Couleur de fond */
+    padding-top: 20px; /* Espacement en haut */
+    overflow-x: hidden; /* Masquer le défilement horizontal */
+    transition: right 0.5s; /* Animation de transition */
+    border-left: 2px solid #91755b;
+}
+
+.vertical-navbar a {
+    padding: 6px 8px 6px 20px;
+    text-decoration: none;
+    font-size: 22px;
+    color: #775e46;
+    display: block;
+    text-align: center;
+}
+.vertical-navbar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+/* Style pour le bouton de bascule */
+.toggle-button {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    z-index: 1000; /* Assure que le bouton est au-dessus de la barre de navigation */
+}
+
+
+.toggle-button button {
+    appearance: none; /* Supprime les styles de l'apparence du bouton */
+    border: none; /* Supprime la bordure par défaut */
+    background-color: transparent; /* Définit le fond comme transparent */
+        
+  }
+
+  .toggle-button img {
+    width: 35px;
+  }
+  
+  .buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    margin: 0px auto;
+  }
+
+  .friend-box {
+    background-color: #977b60; /* Couleur d'arrière-plan pour chaque ami */
+    width: 80%; /* Largeur de chaque boîte d'ami */
+    margin: 5px auto; /* Marge pour centrer la boîte d'ami horizontalement */
+    padding: 10px; /* Rembourrage à l'intérieur de chaque boîte d'ami */
+    border-radius: 5px; /* Arrondir les coins de chaque boîte d'ami */
+    transition: height 0.3s;
+    color: #e0cebc;
+    font-size: 18px;
+    box-shadow: 4px 9px 5px 0px #5a4a3b;
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+    font-weight: bold;
+  }
+
+  /* Style des liens à l'intérieur des boîtes d'amis */
+  .friend-box a {
+      color: inherit; /* Utilisez la couleur de texte par défaut */
+      text-decoration: none; /* Supprimez le soulignement du lien */
+  }
+
+  /* Style lorsque le curseur survole les boîtes d'amis */
+  .friend-box:hover {
+    box-shadow: 6px 14px 10px 0px #5a4a3b;
+    transform: translateY(-5px);
+  }
+
+  .friend-actions {
+    display: none; /* Les boutons sont cachés initialement */
+}
+
+.friend-box.expanded {
+    height: 100px; /* Hauteur augmentée pour la boîte agrandie */
+}
+
+.friend-box.expanded .friend-actions {
+    display: block; /* Affichage des boutons lorsque la boîte est agrandie */
+}
+
+.friend-actions .accept-button,.reject-button {
+    padding: 8px;
+    background-color: #caa787;
+    appearance: none;
+    border: none;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    margin-bottom: 2px;
+    margin-top: 4px;
+}
+
+.friend-actions .accept-button:hover,.reject-button:hover {
+    background-color: #e4c7ac;
+}
+
+.button_add_friend{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 20px;
+    margin-top: 10%;
+    background-color: #91755b;
+    color: #fff; /* Couleur du texte */
+    text-decoration: none;
+    border-radius: 5px;
+    border: 2px black;
+    box-shadow: 4px 9px 5px 0px #5a4a3b;
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.button_add_friend:hover {
+    box-shadow: 5px 12px 7px 0px #5a4a3b;
+    transform: translateY(-5px);
+}
+
+.button_text {
+    margin-right: 5px;
+    font-size: 14px;
+}
+
+.button_icon {
+    width: 35px;
+    height: 35px;
+}
+
+.form-container label {
+    font-size: 18px;
+    margin-right: 5%;
+    color: black;
+}
+
+.form-container input {
+    height: 25px;
+    font-size: 15px;
+}
+
+.form-container button {
+    padding: 10px 20px;
+    background-color: #775e46;
+    color: #fff;
+    border-radius: 5px;
+    border: 2px black;
+}
+
+.user-info {
+    position: absolute;
+    bottom: 50px; /* Augmentez cette valeur pour déplacer l'élément plus haut */
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background-color: #91755b;
+    padding: 20px;
+    font-size: 18px;
+    border-radius: 5px;
+}
+
+.vertical-navbar .second {
+    position: fixed;
+    top: 0;
+    right: -300px; /* Caché par défaut */
+    height: 100%;
+    width: 300px; /* Largeur de la barre de navigation */
+    background-color: #caa787; /* Couleur de fond */
+    padding-top: 20px; /* Espacement en haut */
+    overflow-x: hidden; /* Masquer le défilement horizontal */
+    transition: right 0.5s; /* Animation de transition */
+    border-left: 2px solid #91755b;
+}
+
+.second .nav-link {
+    margin: 30px 10px; /* Espace entre les liens */
+    padding: 10px 20px; /* Ajustez les espaces internes des liens */
+    color: white;
+    background-color: #775e46; /* Couleur de fond des liens */
+    border-radius: 5px; /* Coins arrondis */
+    text-decoration: none; /* Supprime le soulignement par défaut des liens */
+    display: flex; /* Permet l'utilisation de flexbox */
+    align-items: center; /* Centre les éléments verticalement */
+    justify-content: center; /* Centre les éléments horizontalement */
+    transition: background-color 0.3s ease; /* Animation pour le survol */
+    margin-left: 10%;
+    font-size: 18px;
+    box-shadow: 4px 9px 5px 0px #5a4a3b;
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+    padding-right: 100px;
+}
+
+.nav-link img {
+    width: 60px;
+    height: 60px;
+    margin-right: 50px;
+    -webkit-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
+.nav-link:hover {
+    box-shadow: 6px 14px 10px 0px #5a4a3b;
+    transform: translateY(-5px);
+    
+}
+
+.nav-link:hover img {
+    -webkit-transform: rotate(-25deg);
+    transform: rotate(-25deg);
+}
+
+.request-form button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #91755b;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 2px black;
+    box-shadow: 4px 9px 5px 0px #5a4a3b;
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.request-form button:hover {
+    box-shadow: 6px 14px 10px 0px #5a4a3b;
+    transform: translateY(-5px);
+    
+}
+

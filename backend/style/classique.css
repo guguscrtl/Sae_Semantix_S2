@@ -1,0 +1,116 @@
+body {
+    font-family: Arial, sans-serif;
+    font-size: 20px;
+    margin: 20px;
+    background-color: lightslategrey;
+  }
+
+  .container {
+    background-color: #137C8B;
+    margin: 20px;
+    margin-top: 2%;
+    margin-bottom: 0px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-around;
+    align-items: baseline;
+    border-radius: 20px;
+    border: 2px solid #B8CBD0;
+    color: #B8CBD0;
+  }
+
+  #network {
+    height: 800px;
+    width: 97.5%;
+    border: 2px solid #137C8B;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    background-color: #B8CBD0;
+  }
+  #addWordForm {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  #addWordForm input {
+    padding: 10px;
+  }
+  #scores {
+    
+    margin-bottom: 20px;
+    font-size: 25px;
+  }
+
+
+  
+  /* Style pour ajuster la largeur des cellules du tableau */
+  #scores table td, #scores table th {
+    padding: 8px 12px; /* Espace à l'intérieur des cellules */
+    text-align: center; /* Centrage du texte dans les cellules */
+  }
+  
+
+  @media only screen and (max-width: 2000px) {
+    #network {
+      height : 400px;
+    }
+  }
+
+  #addWordForm label {
+    font-size: 23px;
+  }
+
+  #addWordForm input{
+    width : 80%;
+    height: 20px;
+    font-size: 25px;
+    text-align: center;
+  }
+
+  #addWordForm button {
+    padding: 10px;
+    font-size: 20px;
+  }
+
+  .navbar {
+    display: flex;
+    justify-content: center;
+    background-color: #137C8B; /* Fond transparent */
+    margin-left: 35%;
+    margin-right: 35%;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    color: black;
+  }
+  
+  .navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    font-size: 0; /* Empêche l'espacement entre les éléments */
+  }
+  
+  .navbar li {
+    position: relative;
+    margin-bottom: -3px;
+  }
+  
+  .navbar a {
+    display: block;
+    text-align: center;
+    padding: 25px 27px;
+    color: black;
+  }
+  
+  
+  /* Styles pour les icônes */
+  .navbar img {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  
