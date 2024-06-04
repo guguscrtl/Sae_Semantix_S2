@@ -25,3 +25,9 @@ Etape pour lancer le projet (qui est pour l'instant seulement en local):
     - user : noah
     - password : noah
 - Vous êtes maintenant connecté sur notre site !
+
+
+Ce qu'il reste à faire au 04/06/24 : 
+    - afficher le bon pseudo des joueurs en partie
+    - gestion des plusieurs modes à partir du menu (le mode solo renvoie actuellement aussi sur la page multijoueur)
+    - Style de la section multijoueur
