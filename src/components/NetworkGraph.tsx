@@ -153,12 +153,12 @@ const NetworkGraph: React.FC = () => {
     <div>
       <div ref={networkContainer} style={{ height: '500px' }} />
       <div style={{display: isStart ? "none" : "block"}}> 
-        <p>Game ID: {gameId}</p>
+        <p>ID de jeu: {gameId}</p>
         <div>
-          <button onClick={createGame}>Start Game</button>
+          <button onClick={createGame}>Lancer la partie</button>
             <input
               type="text"
-              placeholder="Enter Game ID"
+              placeholder="Entrez l'id du jeu"
               onBlur={(e) => joinGame(e.target.value)}
             />
         </div>
