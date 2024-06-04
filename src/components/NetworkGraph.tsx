@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DataSet, Network } from 'vis-network/standalone/esm/vis-network';
 import { io, Socket } from 'socket.io-client';
 import 'vis-network/styles/vis-network.css';
+import { join } from 'path';
 
 const SOCKET_SERVER_URL = 'http://localhost:3001';
 
@@ -18,11 +19,16 @@ const NetworkGraph: React.FC = () => {
   const [players, setPlayers] = useState<Array<{id: string, pseudo: string}>>([]);
   const [newMessage, setNewMessage] = useState<string>('');
   const [gameId, setGameId] = useState<string | null>(null);
+  const [isStart, setStart] = useState<boolean>(false);
 
   useEffect(() => {
     const socketIo = io(SOCKET_SERVER_URL);
     setSocket(socketIo);
   
+    socketIo.on('setGame', (id) => {
+      setGameId(id);
+    });
+
     socketIo.on('gameCreated', ({ id, words }, pseudo) => {
       console .log("mon pseudo est :" + pseudo);  
       setGameId(id);
@@ -39,10 +45,23 @@ const NetworkGraph: React.FC = () => {
 
     });
 
-    socketIo.on('joinedGame', (id: string, pseudo) => {
+    socketIo.on('joinedGame', (id: string, pseudo, words) => {
+      nodes.clear();
+      edges.clear();
+      if (words && words.length === 2) {
+        const [word1, word2] = words;
+        console.log("mot1: " + word1);
+        console.log("mot2: " + word2);
+        const newNode1 = { id: nodes.length + 1, label: word1 };
+        const newNode2 = { id: nodes.length + 2, label: word2 };
+        nodes.add([newNode1, newNode2]);
+  
+        edges.add({ from: newNode1.id, to: newNode2.id });
+      }
       console.log('Celui qui a rejoint est : ' + pseudo)
       setGameId(id);
       setPlayers(prevPlayers => [ ...prevPlayers, pseudo]);
+      setStart(true);
     });
 
     socketIo.on('update network', ({ nodes: newNodes, edges: newEdges }) => {
@@ -133,50 +152,51 @@ const NetworkGraph: React.FC = () => {
   return (
     <div>
       <div ref={networkContainer} style={{ height: '500px' }} />
-      <div>
-        {gameId ? (
-          <p>Game ID: {gameId}</p>
-        ) : (
-          <div>
-            <button onClick={createGame}>Create Game</button>
+      <div style={{display: isStart ? "none" : "block"}}> 
+        <p>Game ID: {gameId}</p>
+        <div>
+          <button onClick={createGame}>Start Game</button>
             <input
               type="text"
               placeholder="Enter Game ID"
               onBlur={(e) => joinGame(e.target.value)}
             />
-          </div>
-        )}
-      </div>
-      <div>
-        <input
-          type="text"
-          value={word}
-          onChange={(e) => setWord(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' ? handleAddWord() : null}
-          disabled={!isMyTurn}
-        />
-        <button onClick={handleAddWord} disabled={!isMyTurn}>Ajouter le mot</button>
-      </div>
-      <div>
-        <h2>Score: {score}</h2>
-      </div>
-      <div>
-        <h3> Chat</h3>
-        <div style={{ height: '150px', overflowY: 'scroll', border: '1px solid black', padding: '5px' }}>
-          {messages.map((msg, index) => (
-            <div key={index}><strong>{msg.id}</strong>: {msg.message}</div>
-          ))}
         </div>
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' ? handleSendMessage() : null}
-        />
-        <button onClick={handleSendMessage}>Envoyer</button>
       </div>
-      <div>
-        <h3>Joueurs :</h3>
+      <div style={{display: isStart ? "block" : "none"}}>
+        <div>
+          <input
+            type="text"
+            value={word}
+            onChange={(e) => setWord(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' ? handleAddWord() : null}
+            disabled={!isMyTurn}
+          />
+          <button onClick={handleAddWord} disabled={!isMyTurn}>Ajouter le mot</button>
+        </div>
+        <div>
+          <h2>Score: {score}</h2>
+        </div>
+        <div>
+          <h3> Chat</h3>
+          <div style={{ height: '150px', overflowY: 'scroll', border: '1px solid black', padding: '5px' }}>
+            {messages.map((msg, index) => (
+              <div key={index}><strong>{msg.id}</strong>: {msg.message}</div>
+            ))}
+          </div>
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' ? handleSendMessage() : null}
+          />
+          <button onClick={handleSendMessage}>Envoyer</button>
+        </div>
+      </div>
+      <div style={{display: isStart ? "none" : "block"}}>
+        <div>
+          <h3>Joueurs :</h3>
+        </div>
       </div>
     </div>
   );
