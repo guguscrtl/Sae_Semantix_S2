@@ -3,6 +3,13 @@
 # dependencies
 /node_modules
 /.pnp
+/save
+/jdk-21
+/save_java
+C/word2vec.bin
+debug.log
+output.txt
+static_tree.lex
 .pnp.js
 
 # testing
