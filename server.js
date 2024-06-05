@@ -160,6 +160,7 @@ io.on('connection', (socket) => {
       if (game.timer.duration === 30 * 1000) {
         startTimer(gameId, 120 * 1000);
       } else {
+        io.to(gameId).emit('gameFinish');
       }
     }
   };

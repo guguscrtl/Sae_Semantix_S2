@@ -141,6 +141,10 @@ const NetworkGraph: React.FC = () => {
       handleTimerEnd();
     });
 
+    socketIo.on('gameFinish', () => {
+      setFinish(true);
+    });
+
     return () => {
       socketIo.disconnect();
     };
