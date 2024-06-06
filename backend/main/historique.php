@@ -19,10 +19,10 @@ try {
 // Récupérer l'utilisateur connecté
 $username = $_SESSION['username'];
 
-// Sélectionner l'historique des parties de l'utilisateur
 $stmt = $conn->prepare("SELECT * FROM parties WHERE playerName LIKE :username ORDER BY id DESC");
 
-$stmt->bindParam(':username', "*$username*");
+$searchTerm = "%$username%";
+$stmt->bindValue(':username', $searchTerm);
 $stmt->execute();
 $historiqueParties = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -96,12 +96,8 @@ if (count($historiqueParties) > 0) {
                 <thead class="custom-header">
                 <tr>
                     <th scope="col">ID de la Partie</th>
-                    <th scope="col">Nombre de Mots</th>
                     <th scope="col">Score Total</th>
                     <th scope="col">Date</th>
-                    <th scope="col">Max</th>
-                    <th scope="col">Min</th>
-                    <th scope="col">Mode</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -111,13 +107,9 @@ if (count($historiqueParties) > 0) {
                     ?>
 
                     <tr>
-                        <th scope="row"><?php echo $compteur; ?></th>
-                        <td><?php echo $partie['numberOfWords']; ?></td>
+                        <th scope="row"><?php echo $partie['game_id']; ?></th>
                         <td><?php echo $partie['totalScore']; ?></td>
                         <td><?php echo $partie['date']; ?></td>
-                        <td><?php echo $partie['max']; ?></td>
-                        <td><?php echo $partie['min']; ?></td>
-                        <td><?php echo $partie['type']; ?></td>
                     </tr>
                     <?php $compteur--; ?>
                 <?php endforeach; ?>

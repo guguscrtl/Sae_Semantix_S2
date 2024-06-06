@@ -12,16 +12,14 @@ try {
 
 $gameId = isset($_GET['id']) ? $_GET['id'] : null;
 $players = isset($_GET['players']) ? $_GET['players'] : null;
-$nodeCount = isset($_GET['nodeCount']) ? (int)$_GET['nodeCount'] : null;
 $score = isset($_GET['score']) ? (int)$_GET['score'] : null;
 $date = isset($_GET['date']) ? $_GET['date'] : null;
 
-if ($gameId && $players && $nodeCount !== null && $score !== null && $date) {
+if ($gameId && $players && $score !== null && $date) {
     try {
-        $stmt = $conn->prepare("INSERT INTO parties (game_id, playerName, numberOfWords, totalScore, date) VALUES (:gameId, :players, :nodeCount, :score, :date)");
+        $stmt = $conn->prepare("INSERT INTO parties (game_id, playerName, totalScore, date) VALUES (:gameId, :players, :score, :date)");
         $stmt->bindParam(':gameId', $gameId);
         $stmt->bindParam(':players', $players);
-        $stmt->bindParam(':nodeCount', $nodeCount, PDO::PARAM_INT);
         $stmt->bindParam(':score', $score, PDO::PARAM_INT);
         $stmt->bindParam(':date', $date);
 

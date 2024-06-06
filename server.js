@@ -177,8 +177,23 @@ io.on('connection', (socket) => {
 
   const handleTimerEnd = (gameId) => {
     const game = games[gameId];
-    io.to(gameId).emit('timerEnd', game.players_pseudo[socket.id]);
+    io.to(gameId).emit('timerEnd');
     io.to(gameId).emit('gameFinish');
+
+    try{
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const hours = String(date.getHours()).padStart(2, '0');
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const seconds = String(date.getSeconds()).padStart(2, '0');
+      
+      const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;      
+      axios.get(`http://localhost/Sae_Semantix_S2/save_game.php?id=${gameId}&players=${game.players_pseudo.join(',')}&score=${game.score}&date=${formattedDate}`);
+    }catch (error) {
+      console.error('Error saving game results:', error);
+    }
   };
 
   socket.on('new word', async (word) => {

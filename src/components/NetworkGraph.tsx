@@ -28,7 +28,6 @@ const NetworkGraph: React.FC = () => {
   const [isOwner, setOwner] = useState<boolean>(false);
   const [isSolo, setSolo] = useState<boolean>(false);
   const [isJoiner, setJoiner] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>('');
   const [timerProps, setTimerProps] = useState<Props>({
     seconds: 120,
     size: 70,
@@ -154,23 +153,8 @@ const NetworkGraph: React.FC = () => {
       timerRef.current?.startTimer();
     });
 
-    socketIo.on('timerEnd', async (id: string, players) => {
-      console.log("jeongiugnihoiyfgbufybuçfyhbfyuhugy : " + id);
-      if (!id) return;
-        const date = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
-        const playersList = pseudo; // Assuming players are stored in the pseudo state
-
-        const params = new URLSearchParams(window.location.search);
-        const gamemode = params.get('mode');
-
-        try {
-          await axios.get(`http://localhost/Sae_Semantix_S2/save_game.php?id=${id}&players=${players}&nodeCount=${nodes.length}&score=${score}&date=${date}`);
-          console.log('Game results saved successfully');
-        } catch (error) {
-          console.error('Error saving game results:', error);
-        }
+    socketIo.on('timerEnd', () => {
       handleTimerEnd();
-      console.log("dklf,l,oizoijzodjfo");
     });
 
     socketIo.on('gameFinish', () => {
