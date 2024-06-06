@@ -48,3 +48,26 @@ function expandFriendBox(element, index) {
       friendBoxes[i].style.transform = 'translateY(' + (expandedHeight - 20) + 'px)';
   }
 }
+function sendRequest(action) {
+    // Préparez les données du formulaire
+    var formData = {
+        expediteur: $('input[name="expediteur"]').val(),
+        action: action
+    };
+
+    // Envoyer les données via AJAX
+    $.ajax({
+        url: 'traitement_demande.php',
+        type: 'POST',
+        data: formData,
+        success: function(response) {
+            // Traitement en cas de succès
+                location.reload();
+            // Vous pouvez ajouter du code pour mettre à jour l'interface utilisateur ici
+        },
+        error: function(xhr, status, error) {
+            // Traitement en cas d'erreur
+            console.error('Erreur:', error);
+        }
+    });
+}
