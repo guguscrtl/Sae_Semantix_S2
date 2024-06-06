@@ -200,13 +200,13 @@ const NetworkGraph: React.FC = () => {
             size: 14,
             color: 'black',
           },
-          borderWidth: 2,
+          borderWidth: 3,
           color: {
-            border: '#e4c7ac', // Couleur de la bordure des cercles
-            background: '#91755b', // Couleur de fond des cercles
+            border: '#91755b', // Couleur de la bordure des cercles
+            background: ' #138d75  ', // Couleur de fond des cercles
             highlight: {
-              border: '#e4c7ac', // Couleur de la bordure des cercles surlignés
-              background: '#91755b', // Couleur de fond des cercles surlignés
+              border: '#91755b', // Couleur de la bordure des cercles surlignés
+              background: ' #138d75  ', // Couleur de fond des cercles surlignés
             },
             hover: {
               border: '#2B7CE9', // Couleur de la bordure des cercles survolés
@@ -215,7 +215,7 @@ const NetworkGraph: React.FC = () => {
           },
         },
         edges: {
-          width: 2,
+          width: 3,
           color: '91755b',
         },
       };
