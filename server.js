@@ -48,12 +48,17 @@ function hasAccents(word) {
   return /[áàâäãåçéèêëíìîïñóòôöõúùûüýÿ]/i.test(word);
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function getWord() {
+  await sleep(1000);
   const word = await getRandomWordFromFile('output.txt');
   return word;
 }
 
-function runCommandCreateGame(game_id, socket_id, randomWord, randomWord2) {
+function runCommandCreateGame(game_id, socket_id, randomWord, randomWord2, username) {
   const command = `C\\new_game static_tree.lex ${game_id} ${randomWord} ${randomWord2}`;
   exec(command, (error, stdout, stderr) => {
     if (error) {
@@ -65,9 +70,9 @@ function runCommandCreateGame(game_id, socket_id, randomWord, randomWord2) {
       return;
     }
     console.log(`Sortie standard ok pour creategame: ${stdout}`);
-
+    console.log('voici le username que j\'envoi' + username);
     // Emit the words to the client
-    io.to(game_id).emit('gameCreated', { id: game_id, words: [randomWord, randomWord2] });
+    io.to(game_id).emit('gameCreated', { id: game_id, words: [randomWord, randomWord2] }, username);
     return {randomWord, randomWord2};
   });
 }
@@ -87,55 +92,72 @@ let mot1;
 let mot2;
 
 io.on('connection', (socket) => {
-  (async () => {
-    mot1 = await getWord();
-  })();
-  (async () => {
-    mot2 = await getWord();
-  })();
   console.log('a user connected');
-  const gameId = generateUniqueGameId();
-  console.log(mot1);
-  console.log(mot2);
-  console.log('La partie est crée avec comme game id : ' + gameId);
-  runCommandCreateGame(gameId, socket.id, mot1, mot2);
-  socket.emit('setGame', gameId);
 
-  socket.on('createGame', () => {
-    games[gameId] = {
-      players: [socket.id],
-      currentTurn: 0,
-      score: 0,
-      timer: null
-    };
-    const game = games[gameId];
-    socket.join(gameId);
-    socket.emit('joinedGame', gameId, socket.id);
-    startTimer(gameId, 30 * 1000);
-    console.log(socket.id);
-    io.to(socket.id).emit('your turn');
-    io.to(socket.id).emit('update score', game.score);
+  socket.on('chrono', (gameId) => {
+    startTimer(gameId, 120 * 1000);
   });
 
-  socket.on('joinGame', (gameId) => {
-    const game = games[gameId];
-    if (game) {
-      game.players.push(socket.id);
+  socket.on('createGame', async (username) => {
+    const gameId = generateUniqueGameId();
+    try {
+      const [mot1, mot2] = await Promise.all([getWord(), getWord()]);
+      console.log(mot1);
+      console.log(mot2);
+      const newNode1 = { id: 0, label: mot1 };
+      const newNode2 = { id: 1, label: mot2 };
+      games[gameId] = {
+        players: [socket.id],
+        players_pseudo : [username],
+        currentTurn: 0,
+        score: 0,
+        timer: null, 
+        nodes: [newNode1, newNode2], 
+        edges: { from: newNode1.id, to: newNode2.id }
+      };
+      const game = games[gameId];
       socket.join(gameId);
-      io.in(gameId).emit('joinedGame', gameId, game.players, [mot1, mot2]);
+      console.log("Premier username :"  + username);
+      socket.emit('gameCreated', gameId, username);
       console.log(socket.id);
+      console.log("gameId cree : " + gameId);
+      runCommandCreateGame(gameId, socket.id, mot1, mot2, username);
+      socket.emit('setGame', gameId);
+      io.to(socket.id).emit('your turn');
       io.to(socket.id).emit('update score', game.score);
-      if (game.players.length === 1) {
-        io.to(game.players[game.currentTurn]).emit('your turn');
-      }
-      if (game.timer) {
-        const remainingTime = game.timer.duration - (Date.now() - game.timer.startTime);
-        socket.emit('startTimer', { duration: remainingTime, startTime: Date.now() });
-      }
-    } else {
-      socket.emit('error', 'Game not found');
+    } catch (error) {
+      console.error('Error creating game:', error);
+      socket.emit('error', 'Failed to create game');
     }
   });
+
+  socket.on('joinGame', (gameId, username) => {
+    const game = games[gameId];
+    if (!game) {
+        socket.emit('error', 'Game not found');
+        return;
+    }
+
+    if (game.timer && game.timer.duration === 120 * 1000) {
+        io.to(socket.id).emit('error', "La partie est déjà lancée");
+        return;
+    }
+
+    game.players.push(socket.id);
+    game.players_pseudo.push(username);
+    socket.join(gameId);
+    io.in(gameId).emit('joinedGame', gameId, game.players_pseudo, game.nodes, game.edges);
+    console.log(socket.id);
+    io.to(socket.id).emit('update score', game.score);
+
+    if (game.players.length === 1 && !game.timer) {
+        //startTimer(gameId, 120 * 1000);
+    } else if (game.timer) {
+        const remainingTime = game.timer.duration - (Date.now() - game.timer.startTime);
+        socket.emit('startTimer', { duration: remainingTime, startTime: Date.now() });
+    }
+});
+
 
   const startTimer = (gameId, duration) => {
     const startTime = Date.now();
@@ -155,14 +177,7 @@ io.on('connection', (socket) => {
 
   const handleTimerEnd = (gameId) => {
     io.to(gameId).emit('timerEnd');
-    const game = games[gameId];
-    if (game) {
-      if (game.timer.duration === 30 * 1000) {
-        startTimer(gameId, 120 * 1000);
-      } else {
-        io.to(gameId).emit('gameFinish');
-      }
-    }
+    io.to(gameId).emit('gameFinish');
   };
 
   socket.on('new word', async (word) => {

@@ -24,37 +24,24 @@ const NetworkGraph: React.FC = () => {
   const [isStart, setStart] = useState<boolean>(false);
   const [isFinish, setFinish] = useState<boolean>(false);
   const [isEnabled, setInput] = useState<boolean>(false);
+  const [isOwner, setOwner] = useState<boolean>(false);
   const [timerProps, setTimerProps] = useState<Props>({
-    seconds: 30,
+    seconds: 120,
     size: 70,
     strokeBgColor: 'lightgray',
-    strokeColor: 'lightgreen',
+    strokeColor: 'lightblue',
     strokeWidth: 10,
-    onTimerEnd: () => handleTimerEnd(),
+    onTimerEnd: () => setFinish(true),
   });
 
   const handleTimerEnd = () => {
-    setInput(true);
-    setTimerProps({
-      seconds: 120,
-      size: 70,
-      strokeBgColor: 'lightgray',
-      strokeColor: 'lightblue',
-      strokeWidth: 10,
-      onTimerEnd: () => setFinish(true),
-    });
-    timerRef.current?.startTimer();
+    setFinish(true);
   };
-
   
   const [pseudo, setNewPseudo] = useState<string>('');
 
   const PseudoList: React.FC = () => {
-    // Utilisez useState pour gérer la chaîne de pseudos
-  
-    // Diviser la chaîne de pseudos en un tableau
     const pseudoArray = pseudo.split(',');
-  
     return (
       <div>
           {pseudoArray.map((item, index) => (
@@ -80,9 +67,10 @@ const NetworkGraph: React.FC = () => {
       setGameId(id);
     });
 
-    socketIo.on('gameCreated', ({ id, words }) => {
+    socketIo.on('gameCreated', ({ id, words }, pseudo) => {
       setGameId(id);
-
+      setStart(true);
+      setNewPseudo(" " + pseudo);
       if (words && words.length === 2) {
         const [word1, word2] = words;
         const newNode1 = { id: nodes.length + 1, label: word1 };
@@ -93,23 +81,15 @@ const NetworkGraph: React.FC = () => {
       }
     });
 
-    socketIo.on('joinedGame', (id: string, pseudo, words) => {
+    socketIo.on('joinedGame', (id: string, pseudo, node, edge) => {
       nodes.clear();
       edges.clear();
-      if (words && words.length === 2) {
-        const [word1, word2] = words;
-        console.log('mot1: ' + word1);
-        console.log('mot2: ' + word2);
-        const newNode1 = { id: nodes.length + 1, label: word1 };
-        const newNode2 = { id: nodes.length + 2, label: word2 };
-        nodes.add([newNode1, newNode2]);
-
-        edges.add({ from: newNode1.id, to: newNode2.id });
-      }
+      nodes.add(node);
+      edges.add(edge);
       console.log('Celui qui a rejoint est : ' + pseudo);
       setGameId(id);
       setNewPseudo(" " + pseudo);
-      setListPlayer((prevPlayers) => [...prevPlayers, pseudo]);
+      //setListPlayer((prevPlayers) => [...prevPlayers, pseudo]);
       setStart(true);
     });
 
@@ -164,6 +144,10 @@ const NetworkGraph: React.FC = () => {
       setFinish(true);
     });
 
+    socketIo.on('error', (message) => {
+      alert(message);
+    });
+
     return () => {
       socketIo.disconnect();
     };
@@ -198,14 +182,20 @@ const NetworkGraph: React.FC = () => {
   }, [nodes, edges]);
 
   const createGame = () => {
+    const params = new URLSearchParams(window.location.search);
+    const usernameFromURL = params.get('username');
+    setOwner(true);
     if (socket) {
-      socket.emit('createGame');
+      socket.emit('createGame', usernameFromURL);
     }
   };
 
   const joinGame = (id: string) => {
+    setInput(true);
+    const params = new URLSearchParams(window.location.search);
+    const usernameFromURL = params.get('username');
     if (socket) {
-      socket.emit('joinGame', id);
+      socket.emit('joinGame', id, usernameFromURL);
     }
   };
 
@@ -225,6 +215,13 @@ const NetworkGraph: React.FC = () => {
     }
   };
 
+  const startGame = (id: string | null) => {
+    setInput(true);
+    if (socket) {
+      socket.emit('chrono', id);
+    }
+  };
+
   return (
     <div>
       <div style={{ display: isFinish ? 'none' : 'block' }}>
@@ -232,13 +229,12 @@ const NetworkGraph: React.FC = () => {
           <button onClick={redirectToPHP}>Revenir à l'accueil</button>
         </div>
         <div ref={networkContainer} style={{ height: '500px' }} />
-        <div style={{ display: isStart ? 'none' : 'block' }}>
+        <div>
           <p>ID de jeu: {gameId}</p>
-          <div>
+          <div style={{ display: isStart ? 'none' : 'block' }}>
             <button
               onClick={() => {
                 createGame();
-                timerRef.current?.startTimer();
               }}
             >
               Lancer la partie
@@ -248,6 +244,10 @@ const NetworkGraph: React.FC = () => {
               placeholder="Entrez l'id du jeu"
               onBlur={(e) => joinGame(e.target.value)}
             />
+          </div>
+          <div style={{ display: isStart && !isEnabled && isOwner ? 'block' : 'none' }}>
+              <button onClick={() => {startGame(gameId); 
+                timerRef.current?.startTimer();}}>Lancer</button>
           </div>
         </div>
         <div style={{ display: isStart ? 'block' : 'none' }}>
@@ -301,12 +301,6 @@ const NetworkGraph: React.FC = () => {
         </div>
         <div style={styles.topRightCorner}>
           <Timer {...timerProps} ref={timerRef} />
-        </div>
-        <div style={{ display: isStart ? 'none' : 'block' }}>
-          <h3>Joueurs :</h3>
-          <ul>
-            <PseudoList />
-          </ul>
         </div>
       </div>
       <div style={{ display: isFinish ? 'block' : 'none' }}>
