@@ -87,32 +87,36 @@ let mot1;
 let mot2;
 
 io.on('connection', (socket) => {
-  (async () => {
-    mot1 = await getWord();
-  })();
-  (async () => {
-    mot2 = await getWord();
-  })();
   console.log('a user connected');
-  const gameId = generateUniqueGameId();
   console.log(mot1);
   console.log(mot2);
-  console.log('La partie est crée avec comme game id : ' + gameId);
-  runCommandCreateGame(gameId, socket.id, mot1, mot2);
-  socket.emit('setGame', gameId);
 
   socket.on('createGame', () => {
+    const gameId = generateUniqueGameId();
+    (async () => {
+      mot1 = await getWord();
+    })();
+    (async () => {
+      mot2 = await getWord();
+    })();
+    const newNode1 = { id: 0, label: mot1 };
+    const newNode2 = { id: 1, label: mot2 };
     games[gameId] = {
       players: [socket.id],
       currentTurn: 0,
       score: 0,
-      timer: null
+      timer: null, 
+      nodes: [newNode1, newNode2], 
+      edges: { from: newNode1.id, to: newNode2.id }
     };
     const game = games[gameId];
     socket.join(gameId);
-    socket.emit('joinedGame', gameId, socket.id);
+    socket.emit('gameCreated', gameId, socket.id);
     startTimer(gameId, 30 * 1000);
     console.log(socket.id);
+    console.log("gameId cree : " + gameId);
+    runCommandCreateGame(gameId, socket.id, mot1, mot2);
+    socket.emit('setGame', gameId);
     io.to(socket.id).emit('your turn');
     io.to(socket.id).emit('update score', game.score);
   });
@@ -122,7 +126,7 @@ io.on('connection', (socket) => {
     if (game) {
       game.players.push(username);
       socket.join(gameId);
-      io.in(gameId).emit('joinedGame', gameId, game.players, [mot1, mot2]);
+      io.in(gameId).emit('joinedGame', gameId, game.players, game.nodes, game.edges);
       console.log(socket.id);
       io.to(socket.id).emit('update score', game.score);
       if (game.players.length === 1) {
