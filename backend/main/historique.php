@@ -20,7 +20,7 @@ try {
 $username = $_SESSION['username'];
 
 // Sélectionner l'historique des parties de l'utilisateur
-$stmt = $conn->prepare("SELECT * FROM parties WHERE playerName = :username ORDER BY id DESC");
+$stmt = $conn->prepare("SELECT * FROM parties WHERE playerName LIKE :username ORDER BY id DESC");
 
 $stmt->bindParam(':username', $username);
 $stmt->execute();
