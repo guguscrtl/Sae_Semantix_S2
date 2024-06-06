@@ -24,12 +24,31 @@
     padding: 0;
 }
 
+.private-chat-link{
+    padding: 8px;
+  background-color: #caa787;
+  appearance: none;
+  border: none;
+  width: 50%;
+  border-radius: 5px;
+  border: 1px solid lightgrey;
+  margin-bottom: 2px;
+  margin-top: 4px;
+  font-size: 16px;
+  margin-left: 19%;
+  color: black;
+}
+
 /* Style pour le bouton de bascule */
 .toggle-button {
     position: fixed;
     top: 10px;
     right: 10px;
-    z-index: 1000; /* Assure que le bouton est au-dessus de la barre de navigation */
+    z-index: 1000;
+}
+
+.toggle-button button:hover {
+    cursor: pointer;
 }
 
 
@@ -37,7 +56,6 @@
     appearance: none; /* Supprime les styles de l'apparence du bouton */
     border: none; /* Supprime la bordure par défaut */
     background-color: transparent; /* Définit le fond comme transparent */
-        
   }
 
   .toggle-button img {
@@ -75,6 +93,7 @@
   .friend-box:hover {
     box-shadow: 6px 14px 10px 0px #5a4a3b;
     transform: translateY(-5px);
+    cursor: pointer;
   }
 
   .friend-actions {
@@ -102,6 +121,7 @@
 
 .friend-actions .accept-button:hover,.reject-button:hover {
     background-color: #e4c7ac;
+    cursor: pointer;
 }
 
 .button_add_friend{
@@ -122,6 +142,7 @@
 .button_add_friend:hover {
     box-shadow: 5px 12px 7px 0px #5a4a3b;
     transform: translateY(-5px);
+    cursor: pointer;
 }
 
 .button_text {
@@ -207,12 +228,13 @@
 .nav-link:hover {
     box-shadow: 6px 14px 10px 0px #5a4a3b;
     transform: translateY(-5px);
-    
+    cursor: pointer;
 }
 
 .nav-link:hover img {
     -webkit-transform: rotate(-25deg);
     transform: rotate(-25deg);
+    cursor: pointer;
 }
 
 .request-form button {
@@ -230,6 +252,6 @@
 .request-form button:hover {
     box-shadow: 6px 14px 10px 0px #5a4a3b;
     transform: translateY(-5px);
-    
+    cursor: pointer;
 }
 

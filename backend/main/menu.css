@@ -156,12 +156,3 @@ body, html {
   color: white;
 }
 
-
-.notification {
-  width: 8px;
-  height: 8px;
-  background-color: red;
-  border-radius: 50%;
-  display: inline-block;
-  margin-left: 5px; /* Ajustez cela selon vos besoins pour l'alignement */
-}
