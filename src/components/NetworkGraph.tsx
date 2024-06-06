@@ -50,11 +50,8 @@ const NetworkGraph: React.FC = () => {
   const [pseudo, setNewPseudo] = useState<string>('');
 
   const PseudoList: React.FC = () => {
-    // Utilisez useState pour gérer la chaîne de pseudos
-  
-    // Diviser la chaîne de pseudos en un tableau
     const pseudoArray = pseudo.split(',');
-  
+    console.log(pseudo);
     return (
       <div>
           {pseudoArray.map((item, index) => (
@@ -80,9 +77,10 @@ const NetworkGraph: React.FC = () => {
       setGameId(id);
     });
 
-    socketIo.on('gameCreated', ({ id, words }) => {
+    socketIo.on('gameCreated', ({ id, words }, pseudo) => {
       setGameId(id);
       setStart(true);
+      setNewPseudo(" " + pseudo);
       if (words && words.length === 2) {
         const [word1, word2] = words;
         const newNode1 = { id: nodes.length + 1, label: word1 };
@@ -101,7 +99,7 @@ const NetworkGraph: React.FC = () => {
       console.log('Celui qui a rejoint est : ' + pseudo);
       setGameId(id);
       setNewPseudo(" " + pseudo);
-      setListPlayer((prevPlayers) => [...prevPlayers, pseudo]);
+      //setListPlayer((prevPlayers) => [...prevPlayers, pseudo]);
       setStart(true);
     });
 
@@ -190,14 +188,18 @@ const NetworkGraph: React.FC = () => {
   }, [nodes, edges]);
 
   const createGame = () => {
+    const params = new URLSearchParams(window.location.search);
+    const usernameFromURL = params.get('username');
     if (socket) {
-      socket.emit('createGame');
+      socket.emit('createGame', usernameFromURL);
     }
   };
 
   const joinGame = (id: string) => {
+    const params = new URLSearchParams(window.location.search);
+    const usernameFromURL = params.get('username');
     if (socket) {
-      socket.emit('joinGame', id);
+      socket.emit('joinGame', id, usernameFromURL);
     }
   };
 
