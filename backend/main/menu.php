@@ -39,9 +39,9 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container">
     <div class="buttons">
-        <a href="http://localhost:3000/?username=<?php echo urlencode($user); ?>" class="button play-button"><span>Jouer</span></a>
-        <a href="http://localhost:3000" class="button private-button"><span>Créer une partie privée</span></a>
-        <a href="http://localhost:3000" class="button join-button"><span>Rejoindre une partie</span></a>
+        <a href="http://localhost:3000/?username=<?php echo urlencode($user); ?>&mode=solo" class="button play-button"><span>Jouer</span></a>
+        <a href="http://localhost:3000?username=<?php echo urlencode($user); ?>&mode=owner" class="button private-button"><span>Créer une partie privée</span></a>
+        <a href="http://localhost:3000?username=<?php echo urlencode($user); ?>&mode=joiner" class="button join-button"><span>Rejoindre une partie</span></a>
         <a href="compte.php" class="button info-button"><span>Mon compte & Infos</span></a>
     </div>
     <div class="toggle-button">

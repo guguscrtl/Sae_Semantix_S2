@@ -25,6 +25,8 @@ const NetworkGraph: React.FC = () => {
   const [isFinish, setFinish] = useState<boolean>(false);
   const [isEnabled, setInput] = useState<boolean>(false);
   const [isOwner, setOwner] = useState<boolean>(false);
+  const [isSolo, setSolo] = useState<boolean>(false);
+  const [isJoiner, setJoiner] = useState<boolean>(false);
   const [timerProps, setTimerProps] = useState<Props>({
     seconds: 120,
     size: 70,
@@ -62,6 +64,20 @@ const NetworkGraph: React.FC = () => {
   useEffect(() => {
     const socketIo = io(SOCKET_SERVER_URL);
     setSocket(socketIo);
+
+    
+    const params = new URLSearchParams(window.location.search);
+    const gamemode = params.get('mode');
+
+    if (gamemode == 'solo'){
+      setJoiner(false); setSolo(true); setOwner(true);
+    }
+    else if (gamemode == 'owner'){
+      setJoiner(false); setSolo(false); setOwner(true);
+    }
+    else if (gamemode == 'joiner'){
+      setJoiner(true); setSolo(false); setOwner(false);
+    }
 
     socketIo.on('setGame', (id) => {
       setGameId(id);
@@ -230,12 +246,13 @@ const NetworkGraph: React.FC = () => {
         </div>
         <div ref={networkContainer} style={{ height: '500px' }} />
         <div>
-          <p>ID de jeu: {gameId}</p>
+          <p style={{display: isSolo || isJoiner ? 'none' : ''}}>ID de jeu: {gameId}</p>
           <div style={{ display: isStart ? 'none' : 'block' }}>
             <button
               onClick={() => {
                 createGame();
               }}
+              style={{display: isJoiner ? 'none' : ''}}
             >
               Lancer la partie
             </button>
@@ -243,6 +260,7 @@ const NetworkGraph: React.FC = () => {
               type="text"
               placeholder="Entrez l'id du jeu"
               onBlur={(e) => joinGame(e.target.value)}
+              style={{display: isOwner || isSolo ? 'none' : ''}}
             />
           </div>
           <div style={{ display: isStart && !isEnabled && isOwner ? 'block' : 'none' }}>
