@@ -1,34 +1,23 @@
-
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Classement des Parties</title>
+    <link rel="stylesheet" href="../style/historique.css">
+    <title>Mentions légales</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="../style/nav.css?v=2">
     <link rel="stylesheet" href="menu_nav.css?v=2">
-    <link rel="stylesheet" href="../style/regles.css?v=2">
+    <link rel="stylesheet" href="../style/regles.css">
 </head>
-<body>
-
 <div class="background"></div>
-
 
 <div class="parent-container">
     <div class="container">
         <!-- Classement en Bootstrap -->
-        <div class="row justify-content-center">
-            <div class="col-md-8" id="colonne-regles">
-                    <section>
-                        <h1>Règles du Jeu</h1>
-                        <h2>Objectif</h2>
-                        <p><i>Vous êtes un pirate qui navigue en mer. Vous vous trouvez sur une des deux îles au début de la partie. Votre but est de trouver le 
-                            chemin le plus court afin d'atteindre la deuxième île du début, l'île au trésor. A vous de savoir utiliser les bons mots pour le trouver 
-                        dans le temps imparti. Vous pouvez naviguer seul ou avec votre équipage pour accomplir cette mission. Bon courage Moussaillon !</i></p>
-                    </section>
-            </div>
-        </div>
+        <section style='margin-left: 26%'>
+            <h1>Mentions légales</h1>
+            <p>Images de fond et images png : <a href='https://fr.freepik.com/' style='text-decoration: none; color: black;' target=blank>FreePick</a></p>
+        </section>
     </div>
 </div>
 
@@ -46,12 +35,7 @@
     <a href="mentions.php" class="nav-link"><img src="image/parchemin.png" alt="Mentions"> Mentions légales</a>
     <a href="../connexion/deconnexion.php" class="nav-link" style="padding-left:60px"><img src="image/bateau.png" alt="Déconnexion" style="margin-right:20px"> Déconnexion</a>
 </div>
-
-
-
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
