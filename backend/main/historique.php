@@ -141,6 +141,7 @@ if (count($historiqueParties) > 0) {
     <a href="regles.php" class="nav-link"><img src="image/parchemin.png" alt="Règles"> Règles</a>
     <a href="historique.php" class="nav-link"><img src="image/scope.png" alt="Historique" style="margin-left:20px"> Historique</a>
     <a href="compte.php" class="nav-link"><img src="image/pirate.png" alt="Compte"> Compte</a>
+    <a href="mentions.php" class="nav-link"><img src="image/parchemin.png" alt="Mentions"> Mentions légales</a>
     <a href="../connexion/deconnexion.php" class="nav-link" style="padding-left:60px"><img src="image/bateau.png" alt="Déconnexion" style="margin-right:20px"> Déconnexion</a>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
