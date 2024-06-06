@@ -153,6 +153,10 @@ const NetworkGraph: React.FC = () => {
       setFinish(true);
     });
 
+    socketIo.on('error', (message) => {
+      alert(message);
+    });
+
     return () => {
       socketIo.disconnect();
     };

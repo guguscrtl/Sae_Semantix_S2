@@ -130,24 +130,33 @@ io.on('connection', (socket) => {
 
   socket.on('joinGame', (gameId, username) => {
     const game = games[gameId];
-    if (game) {
-      game.players.push(socket.id);
-      game.players_pseudo.push(username);
-      socket.join(gameId);
-      io.in(gameId).emit('joinedGame', gameId, game.players_pseudo, game.nodes, game.edges);
-      console.log(socket.id);
-      io.to(socket.id).emit('update score', game.score);
-      if (game.players.length === 1) {
-        io.to(game.players[game.currentTurn]).emit('your turn');
-      }
-      if (game.timer) {
+    if (!game) {
+        socket.emit('error', 'Game not found');
+        return;
+    }
+
+    if (game.timer && game.timer.duration === 120 * 1000) {
+        // Si le timer de 120 secondes est déjà démarré, empêcher le joueur de rejoindre
+        io.to(socket.id).emit('error', "La partie est déjà lancée");
+        return;
+    }
+
+    game.players.push(socket.id);
+    game.players_pseudo.push(username);
+    socket.join(gameId);
+    io.in(gameId).emit('joinedGame', gameId, game.players_pseudo, game.nodes, game.edges);
+    console.log(socket.id);
+    io.to(socket.id).emit('update score', game.score);
+
+    if (game.players.length === 1 && !game.timer) {
+        // Démarrer le timer uniquement s'il n'est pas déjà démarré
+        startTimer(gameId, 30 * 1000);
+    } else if (game.timer) {
         const remainingTime = game.timer.duration - (Date.now() - game.timer.startTime);
         socket.emit('startTimer', { duration: remainingTime, startTime: Date.now() });
-      }
-    } else {
-      socket.emit('error', 'Game not found');
     }
-  });
+});
+
 
   const startTimer = (gameId, duration) => {
     const startTime = Date.now();
