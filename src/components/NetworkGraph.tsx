@@ -46,6 +46,24 @@ const NetworkGraph: React.FC = () => {
     timerRef.current?.startTimer();
   };
 
+  
+  const [pseudo, setNewPseudo] = useState<string>('');
+
+  const PseudoList: React.FC = () => {
+    // Utilisez useState pour gérer la chaîne de pseudos
+  
+    // Diviser la chaîne de pseudos en un tableau
+    const pseudoArray = pseudo.split(',');
+  
+    return (
+      <div>
+          {pseudoArray.map((item, index) => (
+            <li key={index}>{item}</li>
+          ))}
+      </div>
+    );
+  };
+
   const refreshPage = () => {
     window.location.reload();
   };
@@ -90,6 +108,7 @@ const NetworkGraph: React.FC = () => {
       }
       console.log('Celui qui a rejoint est : ' + pseudo);
       setGameId(id);
+      setNewPseudo(" " + pseudo);
       setListPlayer((prevPlayers) => [...prevPlayers, pseudo]);
       setStart(true);
     });
@@ -275,9 +294,7 @@ const NetworkGraph: React.FC = () => {
             <div className="PlayerContainer">
               <h3>Joueurs :</h3>
               <ul>
-                {liste_player.map((player, index) => (
-                  <li key={index}>{player}</li>
-                ))}
+                <PseudoList />
               </ul>
             </div>
           </div>
@@ -288,9 +305,7 @@ const NetworkGraph: React.FC = () => {
         <div style={{ display: isStart ? 'none' : 'block' }}>
           <h3>Joueurs :</h3>
           <ul>
-            {liste_player.map((player, index) => (
-              <li key={index}>{player}</li>
-            ))}
+            <PseudoList />
           </ul>
         </div>
       </div>
