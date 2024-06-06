@@ -58,7 +58,7 @@ async function getWord() {
   return word;
 }
 
-function runCommandCreateGame(game_id, socket_id, randomWord, randomWord2) {
+function runCommandCreateGame(game_id, socket_id, randomWord, randomWord2, username) {
   const command = `C\\new_game static_tree.lex ${game_id} ${randomWord} ${randomWord2}`;
   exec(command, (error, stdout, stderr) => {
     if (error) {
@@ -70,9 +70,9 @@ function runCommandCreateGame(game_id, socket_id, randomWord, randomWord2) {
       return;
     }
     console.log(`Sortie standard ok pour creategame: ${stdout}`);
-
+    console.log('voici le username que j\'envoi' + username);
     // Emit the words to the client
-    io.to(game_id).emit('gameCreated', { id: game_id, words: [randomWord, randomWord2] });
+    io.to(game_id).emit('gameCreated', { id: game_id, words: [randomWord, randomWord2] }, username);
     return {randomWord, randomWord2};
   });
 }
@@ -103,7 +103,8 @@ io.on('connection', (socket) => {
       const newNode1 = { id: 0, label: mot1 };
       const newNode2 = { id: 1, label: mot2 };
       games[gameId] = {
-        players: [username],
+        players: [socket.id],
+        players_pseudo : [username],
         currentTurn: 0,
         score: 0,
         timer: null, 
@@ -112,11 +113,12 @@ io.on('connection', (socket) => {
       };
       const game = games[gameId];
       socket.join(gameId);
+      console.log("Premier username :"  + username);
       socket.emit('gameCreated', gameId, username);
       startTimer(gameId, 30 * 1000);
       console.log(socket.id);
       console.log("gameId cree : " + gameId);
-      runCommandCreateGame(gameId, socket.id, mot1, mot2);
+      runCommandCreateGame(gameId, socket.id, mot1, mot2, username);
       socket.emit('setGame', gameId);
       io.to(socket.id).emit('your turn');
       io.to(socket.id).emit('update score', game.score);
@@ -129,9 +131,10 @@ io.on('connection', (socket) => {
   socket.on('joinGame', (gameId, username) => {
     const game = games[gameId];
     if (game) {
-      game.players.push(username);
+      game.players.push(socket.id);
+      game.players_pseudo.push(username);
       socket.join(gameId);
-      io.in(gameId).emit('joinedGame', gameId, game.players, game.nodes, game.edges);
+      io.in(gameId).emit('joinedGame', gameId, game.players_pseudo, game.nodes, game.edges);
       console.log(socket.id);
       io.to(socket.id).emit('update score', game.score);
       if (game.players.length === 1) {

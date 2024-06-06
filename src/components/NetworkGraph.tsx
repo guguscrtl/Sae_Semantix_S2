@@ -51,7 +51,6 @@ const NetworkGraph: React.FC = () => {
 
   const PseudoList: React.FC = () => {
     const pseudoArray = pseudo.split(',');
-    console.log(pseudo);
     return (
       <div>
           {pseudoArray.map((item, index) => (
