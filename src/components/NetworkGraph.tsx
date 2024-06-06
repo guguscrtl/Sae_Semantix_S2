@@ -64,7 +64,7 @@ const NetworkGraph: React.FC = () => {
 
     socketIo.on('gameCreated', ({ id, words }) => {
       setGameId(id);
-
+      setStart(true);
       if (words && words.length === 2) {
         const [word1, word2] = words;
         const newNode1 = { id: nodes.length + 1, label: word1 };
@@ -75,19 +75,11 @@ const NetworkGraph: React.FC = () => {
       }
     });
 
-    socketIo.on('joinedGame', (id: string, pseudo, words) => {
+    socketIo.on('joinedGame', (id: string, pseudo, node, edge) => {
       nodes.clear();
       edges.clear();
-      if (words && words.length === 2) {
-        const [word1, word2] = words;
-        console.log('mot1: ' + word1);
-        console.log('mot2: ' + word2);
-        const newNode1 = { id: nodes.length + 1, label: word1 };
-        const newNode2 = { id: nodes.length + 2, label: word2 };
-        nodes.add([newNode1, newNode2]);
-
-        edges.add({ from: newNode1.id, to: newNode2.id });
-      }
+      nodes.add(node);
+      edges.add(edge);
       console.log('Celui qui a rejoint est : ' + pseudo);
       setGameId(id);
       setListPlayer((prevPlayers) => [...prevPlayers, pseudo]);
@@ -213,9 +205,9 @@ const NetworkGraph: React.FC = () => {
           <button onClick={redirectToPHP}>Revenir à l'accueil</button>
         </div>
         <div ref={networkContainer} style={{ height: '500px' }} />
-        <div style={{ display: isStart ? 'none' : 'block' }}>
+        <div>
           <p>ID de jeu: {gameId}</p>
-          <div>
+          <div style={{ display: isStart ? 'none' : 'block' }}>
             <button
               onClick={() => {
                 createGame();
