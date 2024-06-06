@@ -3,7 +3,11 @@
 }
 
 body {
-  background-color: #d8c8ba;
+  background-image: url('../backend/main/image/fond_jeu.jpg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 400px 300px;
+  background-color: #c9b6a4;
 }
 
 .App-logo {
@@ -42,7 +46,7 @@ body {
 }
 
 .vis-network{
-  background-color: #ceb59e;
+  background-color: #5fa2bd;
   border: 2px solid #91755b;
 }
 
@@ -80,6 +84,10 @@ button:hover {
   width: 600px;
   margin-left: 100px;
   margin-top: -70px;
+  div {
+    background-color: #91755b;
+    color: #e2d1c1;
+  }
 }
 
 .PlayerContainer{
