@@ -3,6 +3,7 @@ import { DataSet, Network } from 'vis-network/standalone/esm/vis-network';
 import { io, Socket } from 'socket.io-client';
 import 'vis-network/styles/vis-network.css';
 import Timer, { Props } from './Timer';
+import axios from 'axios';
 
 const SOCKET_SERVER_URL = 'http://localhost:3001';
 
@@ -152,8 +153,23 @@ const NetworkGraph: React.FC = () => {
       timerRef.current?.startTimer();
     });
 
-    socketIo.on('timerEnd', () => {
+    socketIo.on('timerEnd', async (id: string, players) => {
+      console.log("jeongiugnihoiyfgbufybuçfyhbfyuhugy : " + id);
+      if (!id) return;
+        const date = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+        const playersList = pseudo; // Assuming players are stored in the pseudo state
+
+        const params = new URLSearchParams(window.location.search);
+        const gamemode = params.get('mode');
+
+        try {
+          await axios.get(`http://localhost/Sae_Semantix_S2/save_game.php?id=${id}&players=${players}&nodeCount=${nodes.length}&score=${score}&date=${date}`);
+          console.log('Game results saved successfully');
+        } catch (error) {
+          console.error('Error saving game results:', error);
+        }
       handleTimerEnd();
+      console.log("dklf,l,oizoijzodjfo");
     });
 
     socketIo.on('gameFinish', () => {

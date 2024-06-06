@@ -176,7 +176,8 @@ io.on('connection', (socket) => {
   };
 
   const handleTimerEnd = (gameId) => {
-    io.to(gameId).emit('timerEnd');
+    const game = games[gameId];
+    io.to(gameId).emit('timerEnd', game.players_pseudo[socket.id]);
     io.to(gameId).emit('gameFinish');
   };
 

@@ -141,23 +141,6 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 .catch(error => console.error('Error:', error));
             }
         }
-
-        function sendRequest(action, expediteur) {
-            const form = document.getElementById(`request-form-${expediteur}`);
-            const formData = new FormData(form);
-            formData.append('action', action);
-
-            fetch('manage_requests.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.text())
-            .then(data => {
-                showMessage(data);
-                location.reload();
-            })
-            .catch(error => console.error('Error:', error));
-        }
     </script>
 </body>
 </html>
