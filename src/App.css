@@ -74,6 +74,7 @@ input {
 button:hover {
   box-shadow: 6px 14px 10px 0px #5a4a3b;
   transform: translateY(-5px);
+  cursor: pointer;
 }
 
 .BoxContainer{
