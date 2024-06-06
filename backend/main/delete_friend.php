@@ -20,7 +20,7 @@ if (isset($input['id']) && isset($_SESSION['username'])) {
     try {
         $pdo = new PDO($dsn, $username, $password, $options);
 
-        $stmt = $pdo->prepare('DELETE FROM amis WHERE (id = :friendId AND utilisateur = :user) OR (id = :user AND utilisateur = :friendId)');
+        $stmt = $pdo->prepare('DELETE FROM amis WHERE (pseudo_amis = :friendId AND utilisateur = :user) OR (pseudo_amis = :user AND utilisateur = :friendId)');
         $stmt->execute(['friendId' => $friendId, 'user' => $user]);
 
         echo json_encode(['success' => true]);

@@ -69,7 +69,7 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <?php echo htmlspecialchars($friend['pseudo_amis']); ?>
                                 <div class="friend-actions">
                                     <button class="accept-button">Inviter cet(te) ami(e)</button>
-                                    <button class="reject-button" onclick="deleteFriend(<?php echo $friend['id']; ?>)">Supprimer cet(te) ami(e)</button>
+                                    <button class="reject-button" onclick="deleteFriend('<?php echo $friend['pseudo_amis']; ?>')">Supprimer cet(te) ami(e)</button>
                                 </div>
                             </div>
                         </li>
@@ -81,11 +81,14 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <ul>
                     <?php foreach ($requests as $request): ?>
                         <li><?php echo htmlspecialchars($request['expediteur']); ?></li>
-                        <form action="traitement_demande.php" method="post" class="request-form">
+                        <form id="request-form" method="post" class="request-form">
                             <input type="hidden" name="expediteur" value="<?php echo htmlspecialchars($request['expediteur']); ?>">
-                            <button type="" name="action" value="accepter">Accepter</button>
-                            <button type="" name="action" value="refuser">Refuser</button>
+                            <button type="button" name="action" value="accepter" onclick="sendRequest('accepter')">Accepter</button>
+                            <button type="button" name="action" value="refuser" onclick="sendRequest('refuser')">Refuser</button>
                         </form>
+                        <script>
+</script>
+
                     <?php endforeach; ?>
                 </ul>
             <?php endif; ?>
@@ -105,6 +108,7 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     data: $(this).serialize(),
                     success: function(response) {
                         showMessage(response);
+                        document.getElementById('username').value = "";
                     },
                     error: function(xhr, status, error) {
                         console.error(status, error);
