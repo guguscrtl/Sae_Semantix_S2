@@ -1,0 +1,90 @@
+/* Style du conteneur principal */
+
+body {
+    background-color: #caa787;
+}
+.container {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+}
+
+/* Style du conteneur de chat */
+#chat-box {
+    width: 50%;
+    background-color: #caa787;
+    text-align: center;
+    padding: 10px; /* Ajoute un peu d'espace autour du contenu */
+    margin: 0px auto;
+}
+
+/* Ajouter une marge à gauche pour l'heure */
+.message-time {
+    color: rgb(58, 57, 57); /* Couleur de l'heure */
+    font-size: 12px;
+    margin-left: 10px; /* Ajouter une marge à gauche */
+}
+
+.delete-message {
+    width: 20px;
+    margin-left: 20px;
+    margin-bottom: -3px;
+}
+
+.delete-message:hover {
+    cursor: pointer;
+}
+
+#message-form {
+    margin: 0px auto;
+    text-align: center;
+    margin-left: 30%;
+
+    input {
+        margin-top: 1%;
+        padding: 10px;
+        width: 50%;
+        background-color: #DDE6ED;
+        border: none;
+    }
+
+    img{
+        width: 30px;
+        height: 30px;
+        margin-top: 12px;
+    }
+}
+
+h1 {
+    text-align: center;
+    color: white;
+}
+
+/* Style des bulles de chat */
+.chat-bubble-container {
+    clear: both;
+    overflow: auto;
+    margin: 10px 0;
+}
+
+/* Style des bulles de chat */
+.chat-bubble {
+    max-width: 70%;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+/* Style de la bulle de chat pour les messages de l'utilisateur */
+.user-bubble {
+    background-color: #977b60;
+    float: right;
+    color: white;
+}
+
+/* Style de la bulle de chat pour les messages de l'ami */
+.friend-bubble {
+    background-color: #cfb9a3;
+    float: left;
+    color: black;
+}

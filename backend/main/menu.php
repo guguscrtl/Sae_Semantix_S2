@@ -39,7 +39,7 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container">
     <div class="buttons">
-        <a href="http://localhost:3000" class="button play-button"><span>Jouer</span></a>
+        <a href="http://localhost:3000/?username=<?php echo urlencode($user); ?>" class="button play-button"><span>Jouer</span></a>
         <a href="http://localhost:3000" class="button private-button"><span>Créer une partie privée</span></a>
         <a href="http://localhost:3000" class="button join-button"><span>Rejoindre une partie</span></a>
         <a href="compte.php" class="button info-button"><span>Mon compte & Infos</span></a>
@@ -65,13 +65,14 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <ul>
                     <?php foreach ($friends as $index => $friend): ?>
                         <li>
-                            <div class="friend-box" data-id="<?php echo $friend['id']; ?>" onclick="expandFriendBox(this, <?php echo $index; ?>)">
-                                <?php echo htmlspecialchars($friend['pseudo_amis']); ?>
-                                <div class="friend-actions">
-                                    <button class="accept-button">Inviter cet(te) ami(e)</button>
-                                    <button class="reject-button" onclick="deleteFriend('<?php echo $friend['pseudo_amis']; ?>')">Supprimer cet(te) ami(e)</button>
-                                </div>
+                        <div class="friend-box" data-id="<?php echo $friend['id']; ?>" onclick="expandFriendBox(this, <?php echo $index; ?>)">
+                            <?php echo htmlspecialchars($friend['pseudo_amis']); ?>
+                            <div class="friend-actions">
+                                <a href="../chat/chat.php?friend=<?php echo htmlspecialchars($friend['pseudo_amis']); ?>" class="private-chat-link">Chat privé</a>
+                                <span class="notification"></span>
+                                <button class="reject-button" onclick="deleteFriend('<?php echo $friend['pseudo_amis']; ?>')">Supprimer cet(te) ami(e)</button>
                             </div>
+                        </div>
                         </li>
                     <?php endforeach; ?>
                 </ul>
@@ -81,14 +82,11 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <ul>
                     <?php foreach ($requests as $request): ?>
                         <li><?php echo htmlspecialchars($request['expediteur']); ?></li>
-                        <form id="request-form" method="post" class="request-form">
+                        <form id="request-form-<?php echo htmlspecialchars($request['expediteur']); ?>" method="post" class="request-form">
                             <input type="hidden" name="expediteur" value="<?php echo htmlspecialchars($request['expediteur']); ?>">
-                            <button type="button" name="action" value="accepter" onclick="sendRequest('accepter')">Accepter</button>
-                            <button type="button" name="action" value="refuser" onclick="sendRequest('refuser')">Refuser</button>
+                            <button type="button" name="action" value="accepter" onclick="sendRequest('accepter', '<?php echo htmlspecialchars($request['expediteur']); ?>')">Accepter</button>
+                            <button type="button" name="action" value="refuser" onclick="sendRequest('refuser', '<?php echo htmlspecialchars($request['expediteur']); ?>')">Refuser</button>
                         </form>
-                        <script>
-</script>
-
                     <?php endforeach; ?>
                 </ul>
             <?php endif; ?>
@@ -116,7 +114,6 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 });
             });
 
-
             function showMessage(message) {
                 $('#messagePopup').text(message);
                 $('#messagePopup').fadeIn().delay(5000).fadeOut();
@@ -143,6 +140,23 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 })
                 .catch(error => console.error('Error:', error));
             }
+        }
+
+        function sendRequest(action, expediteur) {
+            const form = document.getElementById(`request-form-${expediteur}`);
+            const formData = new FormData(form);
+            formData.append('action', action);
+
+            fetch('manage_requests.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                showMessage(data);
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
 </body>
