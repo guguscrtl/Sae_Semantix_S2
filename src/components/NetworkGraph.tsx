@@ -54,7 +54,7 @@ const NetworkGraph: React.FC = () => {
   
     // Diviser la chaîne de pseudos en un tableau
     const pseudoArray = pseudo.split(',');
-  
+    console.log(pseudo);
     return (
       <div>
           {pseudoArray.map((item, index) => (
@@ -204,8 +204,10 @@ const NetworkGraph: React.FC = () => {
   };
 
   const joinGame = (id: string) => {
+    const params = new URLSearchParams(window.location.search);
+    const usernameFromURL = params.get('username');
     if (socket) {
-      socket.emit('joinGame', id);
+      socket.emit('joinGame', id, usernameFromURL);
     }
   };
 
@@ -301,12 +303,6 @@ const NetworkGraph: React.FC = () => {
         </div>
         <div style={styles.topRightCorner}>
           <Timer {...timerProps} ref={timerRef} />
-        </div>
-        <div style={{ display: isStart ? 'none' : 'block' }}>
-          <h3>Joueurs :</h3>
-          <ul>
-            <PseudoList />
-          </ul>
         </div>
       </div>
       <div style={{ display: isFinish ? 'block' : 'none' }}>

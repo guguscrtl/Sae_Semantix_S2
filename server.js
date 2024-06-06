@@ -117,10 +117,10 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit('update score', game.score);
   });
 
-  socket.on('joinGame', (gameId) => {
+  socket.on('joinGame', (gameId, username) => {
     const game = games[gameId];
     if (game) {
-      game.players.push(socket.id);
+      game.players.push(username);
       socket.join(gameId);
       io.in(gameId).emit('joinedGame', gameId, game.players, [mot1, mot2]);
       console.log(socket.id);

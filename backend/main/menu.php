@@ -39,7 +39,7 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container">
     <div class="buttons">
-        <a href="http://localhost:3000" class="button play-button"><span>Jouer</span></a>
+        <a href="http://localhost:3000/?username=<?php echo urlencode($user); ?>" class="button play-button"><span>Jouer</span></a>
         <a href="http://localhost:3000" class="button private-button"><span>Créer une partie privée</span></a>
         <a href="http://localhost:3000" class="button join-button"><span>Rejoindre une partie</span></a>
         <a href="compte.php" class="button info-button"><span>Mon compte & Infos</span></a>
@@ -81,14 +81,11 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <ul>
                     <?php foreach ($requests as $request): ?>
                         <li><?php echo htmlspecialchars($request['expediteur']); ?></li>
-                        <form id="request-form" method="post" class="request-form">
+                        <form id="request-form-<?php echo htmlspecialchars($request['expediteur']); ?>" method="post" class="request-form">
                             <input type="hidden" name="expediteur" value="<?php echo htmlspecialchars($request['expediteur']); ?>">
-                            <button type="button" name="action" value="accepter" onclick="sendRequest('accepter')">Accepter</button>
-                            <button type="button" name="action" value="refuser" onclick="sendRequest('refuser')">Refuser</button>
+                            <button type="button" name="action" value="accepter" onclick="sendRequest('accepter', '<?php echo htmlspecialchars($request['expediteur']); ?>')">Accepter</button>
+                            <button type="button" name="action" value="refuser" onclick="sendRequest('refuser', '<?php echo htmlspecialchars($request['expediteur']); ?>')">Refuser</button>
                         </form>
-                        <script>
-</script>
-
                     <?php endforeach; ?>
                 </ul>
             <?php endif; ?>
@@ -116,7 +113,6 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 });
             });
 
-
             function showMessage(message) {
                 $('#messagePopup').text(message);
                 $('#messagePopup').fadeIn().delay(5000).fadeOut();
@@ -143,6 +139,23 @@ $friends = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 })
                 .catch(error => console.error('Error:', error));
             }
+        }
+
+        function sendRequest(action, expediteur) {
+            const form = document.getElementById(`request-form-${expediteur}`);
+            const formData = new FormData(form);
+            formData.append('action', action);
+
+            fetch('manage_requests.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(data => {
+                showMessage(data);
+                location.reload();
+            })
+            .catch(error => console.error('Error:', error));
         }
     </script>
 </body>
