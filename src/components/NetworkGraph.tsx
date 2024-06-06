@@ -182,13 +182,25 @@ const NetworkGraph: React.FC = () => {
           size: 30,
           font: {
             size: 14,
-            color: '#000000',
+            color: 'black',
           },
           borderWidth: 2,
+          color: {
+            border: '#e4c7ac', // Couleur de la bordure des cercles
+            background: '#91755b', // Couleur de fond des cercles
+            highlight: {
+              border: '#e4c7ac', // Couleur de la bordure des cercles surlignés
+              background: '#91755b', // Couleur de fond des cercles surlignés
+            },
+            hover: {
+              border: '#2B7CE9', // Couleur de la bordure des cercles survolés
+              background: '#D2E5FF', // Couleur de fond des cercles survolés
+            },
+          },
         },
         edges: {
           width: 2,
-          color: '#000000',
+          color: '91755b',
         },
       };
 
@@ -273,12 +285,13 @@ const NetworkGraph: React.FC = () => {
             <input
               type="text"
               value={word}
+              placeholder='Ajouter un mot'
               onChange={(e) => setWord(e.target.value)}
               onKeyPress={(e) => (e.key === 'Enter' ? handleAddWord() : null)}
               disabled={!isMyTurn}
             />
             <button onClick={handleAddWord} disabled={!isMyTurn || !isEnabled}>
-              Ajouter le mot
+              Ajouter
             </button>
           </div>
           <div>
