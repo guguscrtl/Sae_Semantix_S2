@@ -21,6 +21,7 @@ $friend = $_GET['friend'];
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+    <a href="../main/menu.php"><img src="arrow.png" style="width:30px; margin-left:30px; margin-top: 10px"></a>
     <h1>Chat privé avec <?php echo $friend; ?></h1>
 
     <div id="chat-box">
@@ -34,8 +35,10 @@ $friend = $_GET['friend'];
             <label for="submit-button" style="cursor: pointer; margin-bottom: 0;">
                 <img src="send.png" alt="Envoyer" style="vertical-align: middle;">
             </label>
-            <input type="submit" id="submit-button" style="display: none;"> <!-- Caché pour ne pas afficher le bouton par défaut -->
+            <input type="submit" id="submit-button" style="display: none;"><br><br>
+            
         </div>
+        
     </form>
     </div>
 
