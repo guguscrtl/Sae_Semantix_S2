@@ -24,28 +24,19 @@ const NetworkGraph: React.FC = () => {
   const [isStart, setStart] = useState<boolean>(false);
   const [isFinish, setFinish] = useState<boolean>(false);
   const [isEnabled, setInput] = useState<boolean>(false);
+  const [isOwner, setOwner] = useState<boolean>(false);
   const [timerProps, setTimerProps] = useState<Props>({
-    seconds: 30,
+    seconds: 120,
     size: 70,
     strokeBgColor: 'lightgray',
-    strokeColor: 'lightgreen',
+    strokeColor: 'lightblue',
     strokeWidth: 10,
-    onTimerEnd: () => handleTimerEnd(),
+    onTimerEnd: () => setFinish(true),
   });
 
   const handleTimerEnd = () => {
-    setInput(true);
-    setTimerProps({
-      seconds: 120,
-      size: 70,
-      strokeBgColor: 'lightgray',
-      strokeColor: 'lightblue',
-      strokeWidth: 10,
-      onTimerEnd: () => setFinish(true),
-    });
-    timerRef.current?.startTimer();
+    setFinish(true);
   };
-
   
   const [pseudo, setNewPseudo] = useState<string>('');
 
@@ -193,12 +184,14 @@ const NetworkGraph: React.FC = () => {
   const createGame = () => {
     const params = new URLSearchParams(window.location.search);
     const usernameFromURL = params.get('username');
+    setOwner(true);
     if (socket) {
       socket.emit('createGame', usernameFromURL);
     }
   };
 
   const joinGame = (id: string) => {
+    setInput(true);
     const params = new URLSearchParams(window.location.search);
     const usernameFromURL = params.get('username');
     if (socket) {
@@ -222,6 +215,13 @@ const NetworkGraph: React.FC = () => {
     }
   };
 
+  const startGame = (id: string | null) => {
+    setInput(true);
+    if (socket) {
+      socket.emit('chrono', id);
+    }
+  };
+
   return (
     <div>
       <div style={{ display: isFinish ? 'none' : 'block' }}>
@@ -235,7 +235,6 @@ const NetworkGraph: React.FC = () => {
             <button
               onClick={() => {
                 createGame();
-                timerRef.current?.startTimer();
               }}
             >
               Lancer la partie
@@ -245,6 +244,10 @@ const NetworkGraph: React.FC = () => {
               placeholder="Entrez l'id du jeu"
               onBlur={(e) => joinGame(e.target.value)}
             />
+          </div>
+          <div style={{ display: isStart && !isEnabled && isOwner ? 'block' : 'none' }}>
+              <button onClick={() => {startGame(gameId); 
+                timerRef.current?.startTimer();}}>Lancer</button>
           </div>
         </div>
         <div style={{ display: isStart ? 'block' : 'none' }}>

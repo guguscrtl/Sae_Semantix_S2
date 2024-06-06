@@ -94,6 +94,10 @@ let mot2;
 io.on('connection', (socket) => {
   console.log('a user connected');
 
+  socket.on('chrono', (gameId) => {
+    startTimer(gameId, 120 * 1000);
+  });
+
   socket.on('createGame', async (username) => {
     const gameId = generateUniqueGameId();
     try {
@@ -115,7 +119,6 @@ io.on('connection', (socket) => {
       socket.join(gameId);
       console.log("Premier username :"  + username);
       socket.emit('gameCreated', gameId, username);
-      startTimer(gameId, 30 * 1000);
       console.log(socket.id);
       console.log("gameId cree : " + gameId);
       runCommandCreateGame(gameId, socket.id, mot1, mot2, username);
@@ -136,7 +139,6 @@ io.on('connection', (socket) => {
     }
 
     if (game.timer && game.timer.duration === 120 * 1000) {
-        // Si le timer de 120 secondes est déjà démarré, empêcher le joueur de rejoindre
         io.to(socket.id).emit('error', "La partie est déjà lancée");
         return;
     }
@@ -149,8 +151,7 @@ io.on('connection', (socket) => {
     io.to(socket.id).emit('update score', game.score);
 
     if (game.players.length === 1 && !game.timer) {
-        // Démarrer le timer uniquement s'il n'est pas déjà démarré
-        startTimer(gameId, 30 * 1000);
+        //startTimer(gameId, 120 * 1000);
     } else if (game.timer) {
         const remainingTime = game.timer.duration - (Date.now() - game.timer.startTime);
         socket.emit('startTimer', { duration: remainingTime, startTime: Date.now() });
@@ -176,14 +177,7 @@ io.on('connection', (socket) => {
 
   const handleTimerEnd = (gameId) => {
     io.to(gameId).emit('timerEnd');
-    const game = games[gameId];
-    if (game) {
-      if (game.timer.duration === 30 * 1000) {
-        startTimer(gameId, 120 * 1000);
-      } else {
-        io.to(gameId).emit('gameFinish');
-      }
-    }
+    io.to(gameId).emit('gameFinish');
   };
 
   socket.on('new word', async (word) => {
