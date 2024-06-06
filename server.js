@@ -48,7 +48,12 @@ function hasAccents(word) {
   return /[áàâäãåçéèêëíìîïñóòôöõúùûüýÿ]/i.test(word);
 }
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 async function getWord() {
+  await sleep(1000);
   const word = await getRandomWordFromFile('output.txt');
   return word;
 }
@@ -88,37 +93,37 @@ let mot2;
 
 io.on('connection', (socket) => {
   console.log('a user connected');
-  console.log(mot1);
-  console.log(mot2);
 
-  socket.on('createGame', () => {
+  socket.on('createGame', async (username) => {
     const gameId = generateUniqueGameId();
-    (async () => {
-      mot1 = await getWord();
-    })();
-    (async () => {
-      mot2 = await getWord();
-    })();
-    const newNode1 = { id: 0, label: mot1 };
-    const newNode2 = { id: 1, label: mot2 };
-    games[gameId] = {
-      players: [socket.id],
-      currentTurn: 0,
-      score: 0,
-      timer: null, 
-      nodes: [newNode1, newNode2], 
-      edges: { from: newNode1.id, to: newNode2.id }
-    };
-    const game = games[gameId];
-    socket.join(gameId);
-    socket.emit('gameCreated', gameId, socket.id);
-    startTimer(gameId, 30 * 1000);
-    console.log(socket.id);
-    console.log("gameId cree : " + gameId);
-    runCommandCreateGame(gameId, socket.id, mot1, mot2);
-    socket.emit('setGame', gameId);
-    io.to(socket.id).emit('your turn');
-    io.to(socket.id).emit('update score', game.score);
+    try {
+      const [mot1, mot2] = await Promise.all([getWord(), getWord()]);
+      console.log(mot1);
+      console.log(mot2);
+      const newNode1 = { id: 0, label: mot1 };
+      const newNode2 = { id: 1, label: mot2 };
+      games[gameId] = {
+        players: [username],
+        currentTurn: 0,
+        score: 0,
+        timer: null, 
+        nodes: [newNode1, newNode2], 
+        edges: { from: newNode1.id, to: newNode2.id }
+      };
+      const game = games[gameId];
+      socket.join(gameId);
+      socket.emit('gameCreated', gameId, username);
+      startTimer(gameId, 30 * 1000);
+      console.log(socket.id);
+      console.log("gameId cree : " + gameId);
+      runCommandCreateGame(gameId, socket.id, mot1, mot2);
+      socket.emit('setGame', gameId);
+      io.to(socket.id).emit('your turn');
+      io.to(socket.id).emit('update score', game.score);
+    } catch (error) {
+      console.error('Error creating game:', error);
+      socket.emit('error', 'Failed to create game');
+    }
   });
 
   socket.on('joinGame', (gameId, username) => {
