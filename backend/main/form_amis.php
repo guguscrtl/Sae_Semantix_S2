@@ -10,6 +10,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = $_POST["username"];
 
         if (!empty($username)) {
+            if ($_SESSION["username"] == $username){
+                echo "Vous ne pouvez pas vous ajouter vous-même en ami.";
+                exit();
+            }
             $stmt_check_friend = $conn->prepare("SELECT COUNT(*) FROM client WHERE pseudo = :pseudo");
             $stmt_check_friend->bindParam(":pseudo", $username);
             $stmt_check_friend->execute();
