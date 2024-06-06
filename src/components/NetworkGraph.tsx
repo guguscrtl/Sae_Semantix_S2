@@ -28,6 +28,7 @@ const NetworkGraph: React.FC = () => {
   const [isOwner, setOwner] = useState<boolean>(false);
   const [isSolo, setSolo] = useState<boolean>(false);
   const [isJoiner, setJoiner] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>('');
   const [timerProps, setTimerProps] = useState<Props>({
     seconds: 120,
     size: 70,
@@ -253,11 +254,15 @@ const NetworkGraph: React.FC = () => {
 
   const handleSendMessage = () => {
     if (socket && newMessage.trim() !== '') {
-      const msg = { id: socket.id, message: newMessage };
+      const msg = { 
+        id: socket.id, 
+        message: newMessage 
+      };
       socket.emit('chat message', msg);
       setNewMessage('');
     }
   };
+  
 
   const startGame = (id: string | null) => {
     setInput(true);

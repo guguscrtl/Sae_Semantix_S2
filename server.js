@@ -252,10 +252,15 @@ io.on('connection', (socket) => {
 
   socket.on('chat message', (msg) => {
     const gameId = Array.from(socket.rooms).find(r => r !== socket.id);
-    if (gameId) {
+    if (gameId && games[gameId] && games[gameId].players_pseudo) {
+      const playerIndex = games[gameId].players.indexOf(msg.id);
+      if (playerIndex !== -1) {
+        msg.id = games[gameId].players_pseudo[playerIndex];
+      }
       io.in(gameId).emit('chat message', msg);
     }
   });
+  
 
   socket.on('disconnect', () => {
     console.log('user disconnected');
